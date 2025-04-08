@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <form action="">
+        <p>
+            <label for="FirstName">
+                First Name
+            </label>
+            <input id="FirstName" placeholder="Type you name" type="text">
+        </p>
+
+        <p>
+            <label for="LastName">
+                Last Name
+            </label>
+            <input id="LastName" placeholder="Type you last name" type="text">
+        </p>
+
+        <p>
+            <label for="email">Email</label>
+            <input type="text" placeholder="abc@mail.com" id="email">
+        </p>
+
+        <p>
+            <label for="Date-of-Birth">
+                Date of Birth
+            </label>
+            <input id="Date-of-Birth" type="date">
+        </p>
+
+        <p>
+            Gender:
+            <label for="male">
+                Male
+            </label>
+            <input type="radio" name="gender" value="male">
+            <label for="female">
+                Female
+            </label>
+            <input type="radio" name="gender" value="female">
+        </p>
+
+        <p>
+            Marital status:
+            <select>
+                <option value="none">None</option>
+                <option value="married">Married</option>
+                <option value="not-merried">Not married</option>
+                <option value="widow">Widow</option>
+                <option value="widower">Widover</option>
+                <option value="no-answer">No answer</option>
+            </select>
+        </p>
+
+        <p>
+            <textarea cols="50" rows="10" placeholder="leave you comment here..."></textarea>
+        </p>
+
+        <p>
+            <input type="button" value="Send" onclick="alert('Thank you for aplication! We will call you soon.')">
+        </p>
+            
+    <br> <br>
+    <input type="reset" value="Reset form">
+    </form>
+
+</body>
+</html>
