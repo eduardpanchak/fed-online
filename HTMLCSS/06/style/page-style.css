@@ -1,3 +1,13 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400, 500, 600;
+    font-style: normal;
+  
+}
 .container-block{
     background-color: yellow;
     width: 400px;

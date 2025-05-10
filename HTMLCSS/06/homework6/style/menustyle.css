@@ -3,6 +3,10 @@
 }
 body{
     background-color: rgb(216, 191, 191);
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400, 500, 600;
+    font-style: normal;
 }
 .container{
     width: 360px;
