@@ -1,0 +1,97 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+}
+.container{
+    width: 400px;
+    padding: 50px;
+    background-color: lawngreen;
+    text-align: center;
+    margin: 0 auto;
+    text-transform: uppercase; 
+    /* все великі літери */
+    /* text-transform: lowercase; все малі літери */
+    /* text-transform: capitalize; кожна пепрша літера с великої букви */
+    line-height: 2;
+
+}
+a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+button{
+    /* border: none; */
+    border: 2px solid black;
+    background-color: transparent;
+}
+header{
+    background-color: orange;
+    padding: 50px;
+    text-align: center;
+    /* position: static; */
+    /* position: relative; */
+    /* position: absolute; */
+    /* position: fixed; */
+    position: sticky;
+    top: 0;
+    /* top: ;
+    bottom: ;
+    left: ;
+    right: ; */
+    /* z-index: ; */
+    z-index: 3;
+}
+.possition-fixed{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    padding: 40px 0;
+    background-color: red;
+    border-radius: 70px;
+    position: fixed;
+    /* top: 20px;
+    left: 200; */
+    bottom: 40px;
+    right: 40px;
+    z-index: 2;
+}
+
+.position-absolute{
+    padding: 50px;
+    background-color: darkgreen;
+    text-align: center;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+}
+
+.position-relative{
+   
+    height: 400px;
+    padding: 50px;
+    position: relative;
+    background-color: gray;
+    text-align: center;
+}
+.position-absolute2{
+    position: absolute;
+    padding: 50px;
+    z-index: 1;
+    background-color: brown;
+    top: 150px;
+left: 200px;
+}
+
+.position-absolute3{
+    position: absolute;
+    padding: 50px;
+    z-index: 3;
+    background-color: skyblue;
+    top: 250px;
+    left: 350px;
+}
+

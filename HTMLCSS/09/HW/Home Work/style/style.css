@@ -1,0 +1,87 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    background-color: silver;
+}
+.flag{
+    background-color: black;
+    width: 512px;
+    height: 512px;
+}
+.box1{
+    width: 80px;
+    height: 30px;
+    background-color: #2137FC;
+    border-radius: 6px 6px 0px 0px;
+    position: fixed;
+    top: 343px;
+    left: 216px;
+
+}
+.box2{
+    width: 80px;
+    height: 30px;
+    background-color: #FFD84B;
+    border-radius: 0px 0px 6px 6px;
+    position: fixed;
+    top: 373px;
+    left: 216px;
+}
+.diyaimg{
+    width: 309.72px;
+    height: 181.88px;
+    position: fixed;
+    top: 128.64px;
+    left: 101px;
+}
+
+.yellowbox{
+    background-color: #FFCE22;
+    width: 512px;
+    height: 512px;
+    position: fixed;
+    top: 400px;
+    left: 450px;
+}
+
+.bluebox{
+    width: 512px;
+    height: 271.5px;
+}
+.glyph{
+    width: 400px;
+    height:227.36px;
+    position: absolute;
+    top: 144px;
+    left: 55px;
+}
+.box3{
+    background-color: white;
+    width: 512px;
+    height: 512px; 
+    position: fixed;
+    top: 800px;
+    left: 870px;
+    border-width: 2px 0px 2px 0px;
+    border-style: solid;
+    border-color: #2137FC;
+
+
+}
+.roundyellow{
+    width: 444px;
+    height: 444px;
+    border-radius: 100%;
+    background-color: #FFCE22;
+    position: relative;
+    top: 34px;
+    left: 34px;
+}
+.glyth2{
+    width: 358.44px;
+    height: 203.74px;
+    position: absolute;
+    top: 250px;
+    left: 82px;
+}
