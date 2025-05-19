@@ -1,0 +1,143 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+   font-family: "IBM Plex Sans" "Catamaran" sans-serif;
+   background-color: #00A1C60D;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.container{
+    width: 1300px;
+    margin: 0 auto;
+    padding: 142px 0 128px;
+}
+
+.main-title b{
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: #2D3640;
+}
+
+.main-title{
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 80px;
+    letter-spacing: -0.5px;
+    color: #2D3640;
+}
+
+.introdusing{
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 40px;
+    color: #2B292D;
+    margin-bottom: 50px;
+}
+
+.user-card{
+    overflow: hidden;
+    float: left;
+    padding: 58px 0 122px;
+    width: 295px;
+    height: 470px;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #EAEDF2;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.avatar{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; 
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 86px;
+    margin: 0 auto;
+    background-color: #f0f0f0; 
+    box-sizing: border-box;
+}
+
+.avatar img{
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   object-position: center;
+   display: block;
+}
+.user-card h4{
+    color: #2D3640;
+    font-family: "Catamaran";
+    font-weight: 700;
+    font-size: 20px;
+    line-height: normal;
+    letter-spacing: -0.63px;
+    text-align: center;
+    margin: 34px 0 0px;
+}
+.user-card p{
+    font-family: "Catamaran";
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    margin-bottom: 33px;
+    color: #4B4F52;
+}
+
+.logo-circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 86px;
+    margin: 0 5px;
+}
+
+.skils-1{
+   background-color: #41B883;
+}
+
+.skils-2{
+    background-color: #34474F;
+}
+
+.skils-3{
+    background-color: #202124;
+}
+
+.skils-4{
+    background-color: #61DAFB;
+}
+
+.skils-5{
+    background-color:#D63033;
+}
+
+.skils-6{
+    background-color:#E44E25;
+}
+
+.skils-7{
+    background-color: #1073BB;
+}

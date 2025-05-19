@@ -1,0 +1,78 @@
+*{
+    box-sizing: border-box;
+}
+
+.image-container{
+    width: 600px;
+    /* height: 200px; */
+    border: 2px solid red;
+    border-radius: 50px;
+    /* overflow: hidden; */
+    position: relative;
+}
+
+div>img{
+    width: 200px;
+    height: auto;
+    display: inline-block;
+    vertical-align: top;
+    margin: 30px;
+    /* блок допомогає працювати з такми властивостями як марджин і падінг */
+}
+
+span{
+    display: inline-block;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    position: absolute;
+    top: 0px;
+    left: opx;
+}
+
+.text-container{
+    width: 200px;
+    height: 200px;
+    margin: 50px auto;
+    border: 2px solid red;
+    overflow: scroll;
+}
+h1::after{
+    content: '$$$$$';
+    color: black;
+    font-size: 20px;
+}
+h1::before{
+    content: '!!!!!';
+    color: blue;
+    font-size: 20px;
+}
+
+/* можна стилізувати заголовки завдяки таким властивостям робити лінії блоки */
+h2::after{
+    content: '';
+    display: inline-block;
+    background-color: blue;
+    width: 100px;
+    height: 10px;
+}
+h2::before{
+    content: '';
+    display: inline-block;
+    background-color: yellow;
+    width: 100px;
+    height: 10px;
+}
+.float-content{
+    border: 2px solid black;
+    background-color: green;
+    overflow: hidden;
+}
+.float-item{
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    float: left;
+    /* clear: both; */
+}
+
