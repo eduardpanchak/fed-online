@@ -3,7 +3,7 @@
 }
 
 body{
-   font-family: "IBM Plex Sans" "Catamaran" sans-serif;
+   font-family: "IBM Plex Sans", "Catamaran", sans-serif;
    background-color: #00A1C60D;
 }
 
@@ -15,6 +15,7 @@ body{
 
 .container{
     width: 1300px;
+    overflow: hidden;
     margin: 0 auto;
     padding: 142px 0 128px;
 }
