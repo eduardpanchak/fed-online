@@ -1,0 +1,37 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: yellow;
+}
+
+.bg-image{
+    background-color: yellow;
+    width: 1010px;
+    height: 1010px;
+    background-image: url("../img/avatar.png");
+    /* background-image: url("../img/avatar.png"), url("../img/1.webp"); */
+
+    background-repeat: no-repeat;
+    /* background-repeat: repeat-x; */
+    /* background-repeat: repeat-y; */
+
+    background-position: center center;
+    /* background-size: cover; */
+    /* background-size: contain; */
+    background-size: 100px 100px;
+}
+.bg-image:hover{
+    background-color: blue;
+}
+
+input{
+    background-color: black;
+    color: white;
+    padding: 20px;
+    background-image: url(../img/Vector.svg);
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-size: 16px 16px;
+}
