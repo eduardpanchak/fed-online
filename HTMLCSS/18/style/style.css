@@ -79,7 +79,7 @@ header button{
     display: flex;
     flex-direction: column;
     width: 48%;
-    min-height: 812px;
+    min-height: 60vh;
     padding-left: 7.5rem;
     padding-top: 9.875rem;
     flex-wrap: wrap;
@@ -147,13 +147,13 @@ header button{
     justify-content: space-between;
     padding: 1.5rem 3rem;
     flex-wrap: wrap;
-    position: absolute;
+    position: relative;
     margin: 0 7.5rem;
     width: 80%;
     min-height: 6.25rem;
     border-radius: 0.5rem;
     background-color: #386E41;
-    top: 49rem;
+    transform: translateY(-140px);
 }
 .search-box input{
     background-color: transparent;
@@ -198,6 +198,7 @@ footer{
     align-items: center;
     color: #767676;
     padding-bottom: 5rem;
+    transform: translateY(-140px);
 }
 footer a{
     color: #767676;
@@ -210,7 +211,6 @@ footer i{
 
 @media (max-width: 1024px){
     .search-box{
-        top: 45rem;
         justify-content: space-around;
     }
     .search-box button{
@@ -245,8 +245,8 @@ footer i{
     .search-box{
         margin: 0 2.5rem;
         width: 90%;
-        top: 50rem;
         justify-content: space-between;
+        transform: translateY(0px);
     }
     .text-container p{
         margin-bottom: 50%;
@@ -263,6 +263,9 @@ footer i{
     }
     .logo-button button{
         margin-right: 0;
+    }
+    footer{
+        transform: translateY(0px);
     }
 }
 
@@ -286,9 +289,9 @@ footer i{
         width: 100%;
     }
     .search-box{
-        top: 60rem;
         justify-content: center;
         margin: 0;
+        transform: translateY(0px);
 
     }
     .frame{
@@ -320,14 +323,14 @@ footer i{
 
     @media (max-width:450px) {
     .search-box{
-        top: 57rem;
         padding: 1.5rem 1.5rem;
+        transform: translateY(0px);
     }
     footer{
-        top: 18rem;
     }
     .input-area{
         margin-bottom: 2rem;
+        transform: translateY(0px);
     }
     }
 }
