@@ -1,0 +1,260 @@
+header{
+    background-color: #668E68;
+}
+
+.shadows-into-light-regular {
+  font-family: "Shadows Into Light", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+.cardo-regular {
+  font-family: "Cardo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.navbar-brand{
+    color: rgba(255, 255, 255, 1);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 44px;
+    font-weight: 400;
+    line-height: 53px;
+    letter-spacing: 0%;
+    text-align: left;
+}
+
+.nav-link{
+    color: rgba(255, 255, 255, 1);
+    font-family: 'Cardo', 'Times New Roman', Times, serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0%;
+    text-align: left;
+}
+
+h1{
+    font-size: 110px;
+    font-weight: 400;   
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    font-family: "Shadows Into Light", "cursive";
+    cursor: default;
+}
+
+
+.top-bg-section{
+    width: 100%;
+    height: 520px;
+    background-image: url('/HTMLCSS/22/img/coffee1.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu h3 span{
+    font-size: 50px;
+    font-weight: 400;   
+    color: rgb(0, 0, 0);
+    font-family: "Shadows Into Light", "cursive";
+    cursor: default;
+}
+
+.round-menu{
+    border: solid rgba(129, 97, 59, 1) 7px;
+}
+
+.navbar-toggler-icon {
+  background-image: none;
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-toggler-icon::before {
+  top: -7px;
+}
+
+.navbar-toggler-icon::after {
+  top: 7px;
+}
+
+.navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+  background-color: transparent; 
+}
+
+.navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.navbar-toggler:not(.collapsed) .navbar-toggler-icon::after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.btn-menu{
+    background-color: #668E68;
+    color: white;
+    border: none;
+}
+.btn-menu:hover{
+    background-color: #557755;
+    color: white;
+}
+
+.mt-39{
+    margin-top: 39px;
+}
+.mb-69{
+    margin-bottom: 69px;
+}
+
+.bg-about-section{
+    width: 100%;
+    height: 600px;
+    background-image: url('/HTMLCSS/22/img/about.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+
+.about-text{
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    font-family: "Shadows Into Light", "cursive";
+    cursor: default;
+}
+
+.about-text-h5{
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    font-family: "Shadows Into Light", "cursive";
+    cursor: default;
+    position: relative;
+}
+
+.about-text-h4{
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    font-family: "Shadows Into Light", "cursive";
+    cursor: default;
+    position: relative;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 35px;
+}
+
+.bg-news-section{
+    width: 100%;
+    height: 406px;
+    background: rgba(129, 97, 59, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.news-text-h3{
+    color: rgba(0, 0, 0, 1);
+    font-family: "Shadows Into Light", "cursive";
+    cursor: default;
+    font-size: 35px;
+    font-weight: 500;
+    line-height: 40px;
+    margin-top: 83px;
+}
+
+.news-text-h3 span{
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 25px;
+}
+
+.news-box{
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: flex-start; */
+    background-color: white;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    font-family: "Cardo", serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 35px;
+    color: rgba(0, 0, 0, 1);
+    box-sizing: border-box;
+    border: 1px solid var(--キーカラー, rgba(102, 142, 104, 1));
+    background: rgba(255, 255, 255, 1);
+}
+
+footer{
+    width: 100%;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    font-family: "Cardo", serif;
+}
+
+.footer-contact{
+    font-family: "Cardo", serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 30px;
+}
+
+.button-up{
+    width: 32px;
+    height: 32px;
+    background-color: rgba(102, 142, 104, 1);
+    opacity: 0.8;
+    margin: 0 auto;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.button-up:hover{
+    background-color: rgba(85, 119, 85, 1);
+    opacity: 1;
+}
+
+.fa-play{
+    transform: rotate(-90deg);
+}
+
+.to-top{
+    text-decoration: none;
+    color: white;
+}
