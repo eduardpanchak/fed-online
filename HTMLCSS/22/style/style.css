@@ -53,7 +53,7 @@ h1{
     overflow: hidden;
 }
 
-.menu h3 span{
+.menu h2 span{
     font-size: 50px;
     font-weight: 400;   
     color: rgb(0, 0, 0);
@@ -109,9 +109,9 @@ h1{
 
 .navbar-toggler:focus,
 .navbar-toggler:active {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
+  outline: none;
+  box-shadow: none;
+  border: none;
 }
 
 .btn-menu{
@@ -144,27 +144,27 @@ h1{
 
 .about-text{
     color: white;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-    font-family: "Shadows Into Light", "cursive";
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
+    font-family: "Cardo", "cursive";
     cursor: default;
 }
 
-.about-text-h5{
+.about-text-h3{
     color: white;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
     font-family: "Shadows Into Light", "cursive";
     cursor: default;
     position: relative;
+    font-size: 60px;
 }
 
 .about-text-h4{
     color: white;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-    font-family: "Shadows Into Light", "cursive";
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
+    font-family: "Cardo", "cursive";
     cursor: default;
     position: relative;
-    font-size: 40px;
-    font-weight: 500;
+    font-size: 28px;
     line-height: 35px;
 }
 
@@ -254,7 +254,7 @@ footer{
     transform: rotate(-90deg);
 }
 
-.to-top{
+.button-to-top{
     text-decoration: none;
     color: white;
 }
