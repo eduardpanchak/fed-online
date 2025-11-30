@@ -198,6 +198,10 @@ export default function Services() {
       return 0;
     });
 
+
+  
+
+
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('app.title')} />
@@ -315,7 +319,6 @@ export default function Services() {
           ))
         )}
       </div>
-
       <BottomNav />
     </div>
   );
