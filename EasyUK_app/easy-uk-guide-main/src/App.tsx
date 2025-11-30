@@ -66,7 +66,7 @@ const ProtectedRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
+      <Route path="/" element={<Services />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/documents/:id" element={<DocumentDetails />} />
       <Route path="/nhs" element={<NHS />} />
@@ -84,7 +84,7 @@ const ProtectedRoutes = () => {
       <Route path="/saved" element={<Saved />} />
       <Route path="/search" element={<Search />} />
       <Route path="/settings" element={<Settings />} />
-      <Route path="/services" element={<Services />} />
+      <Route path="/services" element={<Index />} />
       <Route path="/services/:id" element={<ServiceDetails />} />
       <Route path="/business-registration" element={<BusinessRegistration />} />
       <Route path="/add-service" element={<AddService />} />
