@@ -1,0 +1,25 @@
+{
+  "name": "Easy UK - Migrant Assistant",
+  "short_name": "Easy UK",
+  "description": "A simple, fast assistant for migrants living in the UK",
+  "theme_color": "#3CAED5",
+  "background_color": "#F8FAFC",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
