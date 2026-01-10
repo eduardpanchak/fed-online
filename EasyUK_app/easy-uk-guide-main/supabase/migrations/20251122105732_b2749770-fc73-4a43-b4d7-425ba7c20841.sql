@@ -35,6 +35,11 @@ CREATE TABLE public.services (
 ALTER TABLE public.business_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 
+-- Add trial tracking fields to profiles table
+ALTER TABLE public.profiles 
+ADD COLUMN IF NOT EXISTS premium_trial_used boolean NOT NULL DEFAULT false,
+ADD COLUMN IF NOT EXISTS standard_trial_used boolean NOT NULL DEFAULT false;
+
 -- RLS policies for business_profiles
 CREATE POLICY "Users can view their own business profile"
   ON public.business_profiles FOR SELECT
@@ -64,6 +69,13 @@ CREATE POLICY "Users can insert their own services"
 CREATE POLICY "Users can update their own services"
   ON public.services FOR UPDATE
   USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own services"
+  ON public.services FOR DELETE
+  TO authenticated
+  USING (auth.uid() = user_id);
+
+
 
 -- Triggers for updated_at
 CREATE TRIGGER update_business_profiles_updated_at

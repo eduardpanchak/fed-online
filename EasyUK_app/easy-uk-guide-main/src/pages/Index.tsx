@@ -1,3 +1,3 @@
-import Home from './Home';
+import Info from './Info';
 
-export default Home;
+export default Info;

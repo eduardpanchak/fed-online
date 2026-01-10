@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { boolean } from "zod";
 
 /**
  * Database Service
@@ -31,6 +32,33 @@ export const dbService = {
     const { data, error } = await supabase
       .from('profiles')
       .update(updates)
+      .eq('id', userId)
+      .select()
+      .single();
+
+    return { data, error };
+  },
+
+  async markTrialUsed(userId: string, tier: 'standard' | 'top') {
+    const field = tier === 'top' ? 'premium_trial_used' : 'standart_trial_used';
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        [field]: true,
+        premium_trial_used: false,
+        standart_trial_used: false
+      })
+      .eq('id', userId)
+      .select()
+      .single();
+
+    return { data, error };
+  },
+
+  async markPremiumTrialUsed(userId: string) {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({premium_trial_used: true })
       .eq('id', userId)
       .select()
       .single();
@@ -303,6 +331,15 @@ export const dbService = {
       })
       .select()
       .single();
+
+    return { data, error };
+  },
+    // ============ SERVICE REPORTS ============
+  
+  async submitServiceReport(serviceId: string, reason: string) {
+    const { data, error } = await supabase.functions.invoke('submit-service-report', {
+      body: { serviceId, reason }
+    });
 
     return { data, error };
   },

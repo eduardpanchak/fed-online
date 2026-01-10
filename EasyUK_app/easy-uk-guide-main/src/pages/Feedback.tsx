@@ -7,8 +7,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Feedback() {
+  const { language, setLanguage, t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -36,13 +38,13 @@ export default function Feedback() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title="Feedback" showBack />
+      <Header title={t('account.feedback')} showBack />
 
       <div className="container max-w-2xl mx-auto p-4 space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold">We'd love to hear from you</h2>
           <p className="text-muted-foreground">
-            Your feedback helps us improve EasyUK for everyone
+            Your feedback helps us improve Locsy for everyone
           </p>
         </div>
 

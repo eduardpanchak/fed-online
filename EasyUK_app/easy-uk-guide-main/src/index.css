@@ -94,3 +94,12 @@ All colors MUST be HSL.
     }
   }
 }
+
+@layer utilities {
+  .glow-canva {
+    box-shadow:
+      0 0 10px rgba(50, 161, 216, 0.4),
+      0 0 30px rgba(57, 175, 235, 0.25),
+      0 0 40px rgba(57, 175, 235, 0.15);
+  }
+}

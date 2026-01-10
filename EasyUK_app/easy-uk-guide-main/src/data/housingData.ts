@@ -1,140 +1,137 @@
 export interface HousingGuide {
   id: string;
-  title: string;
+  titleKey: string;
   icon: string;
-  content: string[];
-  warnings?: string[];
+  contentKeys: string[];
+  warningsKeys?: string[];
 }
 
 export const housingData: HousingGuide[] = [
   {
     id: 'finding-accommodation',
-    title: 'Finding Accommodation',
+    titleKey: 'housing.findingAccommodation.title',
     icon: '🏠',
-    content: [
-      '**Where to Search:**',
-      '• Rightmove.co.uk - Largest property site',
-      '• Zoopla.co.uk - Properties and area info',
-      '• SpareRoom.co.uk - Room rentals and flatshares',
-      '• OpenRent.com - Direct from landlords (lower fees)',
-      '',
-      '**Budget Planning:**',
-      '• Aim for 30-35% of income on rent',
-      '• Budget for: rent + bills + council tax + transport',
-      '• London is significantly more expensive than other cities',
-      '',
-      '**Viewing Checklist:**',
-      '✅ Check for damp, mold, and heating',
-      '✅ Test water pressure and hot water',
-      '✅ Check windows and door locks',
-      '✅ Ask about bills (included or separate?)',
-      '✅ Transport links and local amenities',
-      '✅ Mobile phone signal',
-      '✅ Previous tenant feedback if possible'
+    contentKeys: [
+      'housing.findingAccommodation.content1',
+      'housing.findingAccommodation.content2',
+      'housing.findingAccommodation.content3',
+      'housing.findingAccommodation.content4',
+      'housing.findingAccommodation.content5',
+      'housing.findingAccommodation.content6',
+      'housing.findingAccommodation.content7',
+      'housing.findingAccommodation.content8',
+      'housing.findingAccommodation.content9',
+      'housing.findingAccommodation.content10',
+      'housing.findingAccommodation.content11',
+      'housing.findingAccommodation.content12',
+      'housing.findingAccommodation.content13',
+      'housing.findingAccommodation.content14',
+      'housing.findingAccommodation.content15',
+      'housing.findingAccommodation.content16',
+      'housing.findingAccommodation.content17',
+      'housing.findingAccommodation.content18',
+      'housing.findingAccommodation.content19'
     ],
-    warnings: [
-      'Never pay money before viewing the property',
-      'Avoid deals that seem too good to be true',
-      'Check landlord is registered on TDS/DPS',
-      'Get everything in writing before paying'
+    warningsKeys: [
+      'housing.findingAccommodation.warning1',
+      'housing.findingAccommodation.warning2',
+      'housing.findingAccommodation.warning3',
+      'housing.findingAccommodation.warning4'
     ]
   },
   {
     id: 'rental-costs',
-    title: 'Rental Costs & Deposits',
+    titleKey: 'housing.rentalCosts.title',
     icon: '💰',
-    content: [
-      '**Upfront Costs:**',
-      '• Deposit: Usually 5 weeks\' rent (legally capped)',
-      '• First month\'s rent in advance',
-      '• Reference/credit check fee: £0-50',
-      '• Possible holding deposit: 1 week\'s rent (deducted from final costs)',
-      '',
-      '**Ongoing Costs:**',
-      '• Monthly rent',
-      '• Council Tax (£100-300/month depending on area)',
-      '• Utilities (gas, electricity, water): £100-150/month',
-      '• Internet: £20-35/month',
-      '• TV Licence: £169/year (if watching live TV)',
-      '',
-      '**Deposit Protection:**',
-      'Your deposit MUST be protected in a government scheme:',
-      '• TDS (Tenancy Deposit Scheme)',
-      '• DPS (Deposit Protection Service)',
-      '• MyDeposits',
-      '',
-      'Landlord must provide certificate within 30 days.'
+    contentKeys: [
+      'housing.rentalCosts.content1',
+      'housing.rentalCosts.content2',
+      'housing.rentalCosts.content3',
+      'housing.rentalCosts.content4',
+      'housing.rentalCosts.content5',
+      'housing.rentalCosts.content6',
+      'housing.rentalCosts.content7',
+      'housing.rentalCosts.content8',
+      'housing.rentalCosts.content9',
+      'housing.rentalCosts.content10',
+      'housing.rentalCosts.content11',
+      'housing.rentalCosts.content12',
+      'housing.rentalCosts.content13',
+      'housing.rentalCosts.content14',
+      'housing.rentalCosts.content15',
+      'housing.rentalCosts.content16',
+      'housing.rentalCosts.content17',
+      'housing.rentalCosts.content18'
     ],
-    warnings: [
-      'No letting agent fees for tenants (banned since 2019)',
-      'Deposit must be returned within 10 days of end of tenancy',
-      'Take photos of property condition on move-in day',
-      'Check inventory document carefully'
+    warningsKeys: [
+      'housing.rentalCosts.warning1',
+      'housing.rentalCosts.warning2',
+      'housing.rentalCosts.warning3',
+      'housing.rentalCosts.warning4'
     ]
   },
   {
     id: 'tenant-rights',
-    title: 'Tenant Rights',
+    titleKey: 'housing.tenantRights.title',
     icon: '🛡️',
-    content: [
-      '**Your Rights:**',
-      '✅ Live in a safe, properly maintained property',
-      '✅ Have repairs done in reasonable time',
-      '✅ Get deposit back if property undamaged',
-      '✅ Minimum 24 hours notice for landlord visits',
-      '✅ Challenge unfair eviction',
-      '✅ Not be discriminated against',
-      '',
-      '**Landlord Must Provide:**',
-      '• Written tenancy agreement',
-      '• Gas safety certificate (renewed annually)',
-      '• Energy Performance Certificate (EPC)',
-      '• "How to Rent" guide',
-      '• Smoke alarms and carbon monoxide detectors',
-      '',
-      '**If Things Go Wrong:**',
-      '1. Report issues to landlord in writing',
-      '2. Keep records of all communication',
-      '3. Contact Citizens Advice if unresolved',
-      '4. Report to local council if serious disrepair',
-      '5. Use deposit protection scheme for disputes'
+    contentKeys: [
+      'housing.tenantRights.content1',
+      'housing.tenantRights.content2',
+      'housing.tenantRights.content3',
+      'housing.tenantRights.content4',
+      'housing.tenantRights.content5',
+      'housing.tenantRights.content6',
+      'housing.tenantRights.content7',
+      'housing.tenantRights.content8',
+      'housing.tenantRights.content9',
+      'housing.tenantRights.content10',
+      'housing.tenantRights.content11',
+      'housing.tenantRights.content12',
+      'housing.tenantRights.content13',
+      'housing.tenantRights.content14',
+      'housing.tenantRights.content15',
+      'housing.tenantRights.content16',
+      'housing.tenantRights.content17',
+      'housing.tenantRights.content18',
+      'housing.tenantRights.content19',
+      'housing.tenantRights.content20'
     ],
-    warnings: [
-      'Section 21 "no-fault" evictions require 2 months notice',
-      'Don\'t withhold rent - even if repairs needed',
-      'Landlord cannot evict you without court order',
-      'Get contents insurance for your belongings'
+    warningsKeys: [
+      'housing.tenantRights.warning1',
+      'housing.tenantRights.warning2',
+      'housing.tenantRights.warning3',
+      'housing.tenantRights.warning4'
     ]
   },
   {
     id: 'bills-utilities',
-    title: 'Bills & Utilities',
+    titleKey: 'housing.billsUtilities.title',
     icon: '💡',
-    content: [
-      '**Essential Bills:**',
-      '',
-      '**1. Council Tax** (£100-300/month)',
-      '• Paid to local council for services',
-      '• Discounts: 25% for single occupancy, 100% for full-time students',
-      '• Register within 2 weeks of moving in',
-      '',
-      '**2. Gas & Electricity** (£80-120/month)',
-      '• Compare suppliers on comparison sites',
-      '• Take meter readings on move-in day',
-      '• Consider fixed-rate tariffs',
-      '',
-      '**3. Water** (£30-40/month)',
-      '• Often included in rent for flats',
-      '• Usually billed by regional water company',
-      '',
-      '**4. Internet** (£20-35/month)',
-      '• BT, Sky, Virgin Media, TalkTalk, Plusnet',
-      '• Check what speed you need',
-      '• Usually 12-24 month contract',
-      '',
-      '**5. TV Licence** (£169/year)',
-      '• Required if watching live TV or BBC iPlayer',
-      '• Not required for Netflix/YouTube only'
+    contentKeys: [
+      'housing.billsUtilities.content1',
+      'housing.billsUtilities.content2',
+      'housing.billsUtilities.content3',
+      'housing.billsUtilities.content4',
+      'housing.billsUtilities.content5',
+      'housing.billsUtilities.content6',
+      'housing.billsUtilities.content7',
+      'housing.billsUtilities.content8',
+      'housing.billsUtilities.content9',
+      'housing.billsUtilities.content10',
+      'housing.billsUtilities.content11',
+      'housing.billsUtilities.content12',
+      'housing.billsUtilities.content13',
+      'housing.billsUtilities.content14',
+      'housing.billsUtilities.content15',
+      'housing.billsUtilities.content16',
+      'housing.billsUtilities.content17',
+      'housing.billsUtilities.content18',
+      'housing.billsUtilities.content19',
+      'housing.billsUtilities.content20',
+      'housing.billsUtilities.content21',
+      'housing.billsUtilities.content22',
+      'housing.billsUtilities.content23'
     ]
   }
 ];
+

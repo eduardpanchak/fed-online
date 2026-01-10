@@ -6,7 +6,7 @@ import ltTranslations from './translations/lt.json';
 
 export type Language = 'en' | 'uk' | 'ru' | 'pl' | 'lt';
 
-export const translations: Record<Language, typeof enTranslations> = {
+export const translations: Record<Language, Record<string, any>> = {
   en: enTranslations,
   uk: ukTranslations,
   ru: ruTranslations,

@@ -9,15 +9,17 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { FilterProvider } from "@/contexts/FilterContext";
 import { UserPreferencesProvider, useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+// import { Info } from "@/pages/Info";
 import Start from "./pages/Start";
 import Auth from "./pages/Auth";
-import Index from "./pages/Index";
+import Info from "./pages/Info";
 import Documents from "./pages/Documents";
 import DocumentDetails from "./pages/DocumentDetails";
 import NHS from "./pages/NHS";
 import NHSDetails from "./pages/NHSDetails";
-import Checklists from "./pages/Checklists";
-import ChecklistDetails from "./pages/ChecklistDetails";
+import Lists from "./pages/Lists";
+import ListDetail from "./pages/ListDetail";
+import ArchivedLists from "./pages/ArchivedLists";
 import Jobs from "./pages/Jobs";
 import JobDetails from "./pages/JobDetails";
 import Housing from "./pages/Housing";
@@ -43,8 +45,13 @@ import MyProfile from "./pages/MyProfile";
 import About from "./pages/About";
 import Feedback from "./pages/Feedback";
 import FAQ from "./pages/FAQ";
+import Advertising from "./pages/Advertising";
+import AddAdvertisement from "./pages/AddAdvertisement";
+import MyAds from "./pages/MyAds";
+import ModerationQueue from "./pages/ModerationQueue";
 import NotFound from "./pages/NotFound";
-import { Info } from "lucide-react";
+import 'leaflet/dist/leaflet.css';
+
 
 const queryClient = new QueryClient();
 
@@ -71,8 +78,10 @@ const ProtectedRoutes = () => {
       <Route path="/documents/:id" element={<DocumentDetails />} />
       <Route path="/nhs" element={<NHS />} />
       <Route path="/nhs/:id" element={<NHSDetails />} />
-      <Route path="/checklists" element={<Checklists />} />
-      <Route path="/checklists/:id" element={<ChecklistDetails />} />
+      <Route path="/lists" element={<Lists />} />
+      <Route path="/lists/:id" element={<ListDetail />} />
+      <Route path="/lists/archived" element={<ArchivedLists />} />
+      <Route path="/checklists" element={<Lists />} />
       <Route path="/jobs" element={<Jobs />} />
       <Route path="/jobs/:id" element={<JobDetails />} />
       <Route path="/housing" element={<Housing />} />
@@ -84,7 +93,7 @@ const ProtectedRoutes = () => {
       <Route path="/saved" element={<Saved />} />
       <Route path="/search" element={<Search />} />
       <Route path="/settings" element={<Settings />} />
-      <Route path="/services" element={<Index />} />
+      <Route path="/info" element={<Info />} />
       <Route path="/services/:id" element={<ServiceDetails />} />
       <Route path="/business-registration" element={<BusinessRegistration />} />
       <Route path="/add-service" element={<AddService />} />
@@ -96,6 +105,10 @@ const ProtectedRoutes = () => {
       <Route path="/about" element={<About />} />
       <Route path="/feedback" element={<Feedback />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/advertising" element={<Advertising />} />
+      <Route path="/advertising/add" element={<AddAdvertisement />} />
+      <Route path="/advertising/my-ads" element={<MyAds />} />
+      <Route path="/moderation-queue" element={<ModerationQueue />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -108,7 +121,7 @@ const App = () => (
         <AuthProvider>
           <UserPreferencesProvider>
             <AppProvider>
-              <TooltipProvider>
+               <TooltipProvider>
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
@@ -120,7 +133,7 @@ const App = () => (
                     <Route path="*" element={<ProtectedRoutes />} />
                   </Routes>
                 </BrowserRouter>
-              </TooltipProvider>
+                </TooltipProvider>
             </AppProvider>
           </UserPreferencesProvider>
         </AuthProvider>

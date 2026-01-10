@@ -1,17 +1,19 @@
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function About() {
+  const { language, setLanguage, t } = useLanguage();
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title="About EasyUK" showBack />
+      <Header title={t('account.aboutEasyUK')} showBack />
 
       <div className="container max-w-2xl mx-auto p-4 space-y-6">
         <div className="prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold text-foreground">Welcome to EasyUK</h2>
+          <h2 className="text-2xl font-bold text-foreground">Welcome to Locsy</h2>
           
           <p className="text-muted-foreground">
-            EasyUK is your comprehensive guide to living and working in the United Kingdom.
+            Locsy is your comprehensive guide to living and working in the United Kingdom.
             We provide essential information and resources for immigrants to help navigate
             life in the UK.
           </p>

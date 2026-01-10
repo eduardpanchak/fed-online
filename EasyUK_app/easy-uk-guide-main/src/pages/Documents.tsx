@@ -6,12 +6,14 @@ import { PaywallModal } from '@/components/PaywallModal';
 import { useNavigate } from 'react-router-dom';
 import { documentsData } from '@/data/documentsData';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const FREE_ITEMS_COUNT = 3;
 
 export default function Documents() {
   const navigate = useNavigate();
   const { isPro } = useUserPreferences();
+  const { t } = useLanguage();
   const [showPaywall, setShowPaywall] = useState(false);
 
   const handleItemClick = (docId: string, index: number) => {
@@ -25,14 +27,14 @@ export default function Documents() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title="Documents" showSearch />
+      <Header title={t('home.documents')} showSearch />
       
       <div className="max-w-md mx-auto px-4 py-6 space-y-3">
         {documentsData.map((doc, index) => (
           <Card
             key={doc.id}
             icon={doc.icon}
-            title={doc.title}
+            title={t(doc.titleKey)}
             onClick={() => handleItemClick(doc.id, index)}
             locked={index >= FREE_ITEMS_COUNT && !isPro}
           />
@@ -44,3 +46,4 @@ export default function Documents() {
     </div>
   );
 }
+

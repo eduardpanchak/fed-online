@@ -1,8 +1,11 @@
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, MapPin, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { Badge } from './ui/badge';
 
 interface ServiceCardProps {
   id: string;
@@ -12,6 +15,9 @@ interface ServiceCardProps {
   pricing: string | null;
   photo: string | null;
   subscriptionTier?: string;
+  distance?: string | null;
+  userId?: string;
+  moderationStatus?: string | null;
   onClick?: () => void;
 }
 
@@ -23,13 +29,21 @@ export const ServiceCard = ({
   pricing,
   photo,
   subscriptionTier,
+  distance,
+  userId,
+  moderationStatus,
   onClick
 }: ServiceCardProps) => {
   const { toggleSaved, isSaved } = useApp();
+  const { user } = useAuth();
+  const { t } = useLanguage();
   const saved = isSaved(id);
   const isPremium = subscriptionTier === 'top' || subscriptionTier === 'premium';
   const [averageRating, setAverageRating] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
+
+  const isOwner = user && userId === user.id;
+  const showModerationBadge = isOwner && moderationStatus === 'suspended';
 
   useEffect(() => {
     fetchRating();
@@ -66,7 +80,8 @@ export const ServiceCard = ({
         "flex items-start gap-3 shadow-sm relative",
         isPremium 
           ? "border-2 border-amber-500 shadow-lg shadow-amber-500/20" 
-          : "border border-border"
+          : "border border-border",
+          showModerationBadge && "opacity-70 border-destructive"
       )}
     >
       {/* Left side - Photo */}
@@ -86,9 +101,17 @@ export const ServiceCard = ({
 
       {/* Right side - Content */}
       <div className="flex-1 min-w-0 pr-8">
-        <h3 className="font-bold text-base text-foreground mb-1 line-clamp-1">
-          {name}
-        </h3>
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="font-bold text-base text-foreground line-clamp-1">
+            {name}
+          </h3>
+          {showModerationBadge && (
+            <Badge variant="destructive" className="text-xs shrink-0">
+              <AlertTriangle className="h-3 w-3 mr-1" />
+              {t('myServices.underModeration')}
+            </Badge>
+          )}
+        </div>
         {description && (
           <p className="text-xs text-muted-foreground mb-1.5 line-clamp-2">
             {description}
@@ -115,7 +138,18 @@ export const ServiceCard = ({
             </div>
           )}
         </div>
+        {/* Distance badge */}
+        {distance && (
+          <div className="flex items-center gap-1 mt-1.5">
+            <MapPin className="h-3 w-3 text-primary" />
+            <span className="text-xs font-medium text-primary">
+              {distance}
+            </span>
+          </div>
+        )}
       </div>
+
+      
 
       {/* Heart button */}
       <button

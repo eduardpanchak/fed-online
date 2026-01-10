@@ -3,8 +3,13 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface ServiceFilters {
   searchText: string;
   selectedCategory: string;
-  sortBy: 'newest' | 'price';
+  sortBy: 'newest' | 'price' | 'distance';
   showNearby: boolean;
+  selectLangugages: string[];
+  searchPostcode: string;
+  searchRadius: number;
+  userLat: number | null;
+  userLng: number | null;
 }
 
 interface FilterContextType {
@@ -20,6 +25,11 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
     selectedCategory: 'all',
     sortBy: 'newest',
     showNearby: false,
+    selectLangugages: [],
+    searchPostcode: '',
+    searchRadius: 10,
+    userLat: null,
+    userLng: null,
   });
 
   return (

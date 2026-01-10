@@ -14,6 +14,8 @@ interface Profile {
   phone: string | null;
   location: string | null;
   is_business_user?: boolean;
+  premium_trial_used?: boolean;
+  standart_trial_used?: boolean;
 }
 
 interface Subscription {
@@ -59,6 +61,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error('Error fetching profile:', error);
     }
   };
+  
+  
 
   const checkSubscription = async () => {
     try {

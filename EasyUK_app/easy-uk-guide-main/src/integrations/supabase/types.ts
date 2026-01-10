@@ -1,3 +1,4 @@
+import type { SupabaseClient } from "@supabase/supabase-js"
 export type Json =
   | string
   | number
@@ -5,6 +6,8 @@ export type Json =
   | null
   | { [key: string]: Json | undefined }
   | Json[]
+
+
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
@@ -14,6 +17,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      advertisements: {
+        Row: {
+          address: string | null
+          category: string | null
+          city: string | null
+          clicks: number
+          country: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          impressions: number
+          languages: string[] | null
+          media_type: string
+          media_url: string
+          postcode: string | null
+          status: string
+          target_url: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
+          clicks?: number
+          country?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          impressions?: number
+          languages?: string[] | null
+          media_type: string
+          media_url: string
+          postcode?: string | null
+          status?: string
+          target_url: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
+          clicks?: number
+          country?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          impressions?: number
+          languages?: string[] | null
+          media_type?: string
+          media_url?: string
+          postcode?: string | null
+          status?: string
+          target_url?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       business_profiles: {
         Row: {
           business_type: string | null
@@ -104,6 +167,106 @@ export type Database = {
         }
         Relationships: []
       }
+      list_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_done: boolean
+          list_id: string
+          sort_order: number
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_done?: boolean
+          list_id: string
+          sort_order?: number
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_done?: boolean
+          list_id?: string
+          sort_order?: number
+          text?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lists: {
+        Row: {
+          created_at: string
+          id: string
+          is_archived: boolean
+          is_template: boolean
+          progress: number
+          template_key: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_archived?: boolean
+          is_template?: boolean
+          progress?: number
+          template_key?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_archived?: boolean
+          is_template?: boolean
+          progress?: number
+          template_key?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+
+      owner_bans: {
+        Row: {
+          banned_by: string
+          created_at: string
+          id: string
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          banned_by: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          banned_by?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+
       profiles: {
         Row: {
           avatar_url: string | null
@@ -114,6 +277,8 @@ export type Database = {
           location: string | null
           name: string | null
           phone: string | null
+          premium_trial_used: boolean
+          standart_trial_used: boolean
           updated_at: string
         }
         Insert: {
@@ -125,6 +290,8 @@ export type Database = {
           location?: string | null
           name?: string | null
           phone?: string | null
+          premium_trial_used: boolean
+          standart_trial_used: boolean
           updated_at?: string
         }
         Update: {
@@ -136,6 +303,8 @@ export type Database = {
           location?: string | null
           name?: string | null
           phone?: string | null
+          premium_trial_used: boolean 
+          // standart_trial_used: boolean 
           updated_at?: string
         }
         Relationships: []
@@ -166,6 +335,38 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      service_reports: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          reporter_user_id: string
+          service_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_user_id: string
+          service_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_user_id?: string
+          service_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_reports_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       service_reviews: {
         Row: {
@@ -209,6 +410,8 @@ export type Database = {
         Row: {
           address: string | null
           category: string
+          city: string | null
+          country: string | null
           click_count: number | null
           created_at: string
           description: string | null
@@ -217,9 +420,14 @@ export type Database = {
           languages: string[]
           latitude: number | null
           longitude: number | null
+           moderation_status:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           phone: string | null
           photos: string[] | null
+          postcode: string | null
           pricing: string | null
+          reports_count: number | null
           service_name: string
           social_links: Json | null
           status: string
@@ -234,6 +442,9 @@ export type Database = {
         Insert: {
           address?: string | null
           category: string
+          city?: string | null
+          country?: string | null
+          postcode?: string | null
           click_count?: number | null
           created_at?: string
           description?: string | null
@@ -242,9 +453,13 @@ export type Database = {
           languages: string[]
           latitude?: number | null
           longitude?: number | null
+          moderation_status?:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           phone?: string | null
           photos?: string[] | null
           pricing?: string | null
+          reports_count?: number | null
           service_name: string
           social_links?: Json | null
           status?: string
@@ -259,6 +474,9 @@ export type Database = {
         Update: {
           address?: string | null
           category?: string
+          city?: string | null
+          country?: string | null
+          postcode?: string | null
           click_count?: number | null
           created_at?: string
           description?: string | null
@@ -267,9 +485,13 @@ export type Database = {
           languages?: string[]
           latitude?: number | null
           longitude?: number | null
+          moderation_status?:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           phone?: string | null
           photos?: string[] | null
           pricing?: string | null
+          reports_count?: number | null
           service_name?: string
           social_links?: Json | null
           status?: string
@@ -325,6 +547,29 @@ export type Database = {
         }
         Relationships: []
       }
+
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+
       user_settings: {
         Row: {
           created_at: string
@@ -361,9 +606,24 @@ export type Database = {
     }
     Functions: {
       cancel_expired_trials: { Args: never; Returns: undefined }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      increment_ad_clicks: { Args: { ad_id: string }; Returns: undefined }
+      increment_ad_impressions: { Args: { ad_id: string }; Returns: undefined }
+       increment_click_count: {
+        Args: { service_id: string }
+        Returns: undefined
+      }
+      increment_view_count: { Args: { service_id: string }; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      moderation_status: "active" | "under_review" | "suspended"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -490,6 +750,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      moderation_status: ["active", "under_review", "suspended"],
+    },
   },
 } as const

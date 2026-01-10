@@ -5,7 +5,7 @@ import { Card } from '@/components/Card';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-export default function Home() {
+export default function Info() {
   const navigate = useNavigate();
   const { t } = useLanguage();
 

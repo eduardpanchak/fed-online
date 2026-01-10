@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { BottomNav } from '@/components/BottomNav';
 import { Header } from '@/components/Header';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { MapPin } from "lucide-react";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -200,9 +201,11 @@ export default function Auth() {
       <div className="w-full fixed left-0 top-0"> <Header title={t('app.title')} showBack /> </div>
       <Card className="w-full max-w-md p-6 space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-primary">EasyUK</h1>
+          <h1 className="text-3xl font-bold text-primary">
+            Locsy 
+          </h1>
           <p className="text-muted-foreground">
-            {isSignUp ? 'Create your account' : 'Welcome back'}
+            {isSignUp ? 'Create your account' : 'Welcome back to'}
           </p>
         </div>
 

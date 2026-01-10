@@ -1,9 +1,52 @@
-import { Home, CheckSquare, Bookmark, User, Briefcase, Info } from 'lucide-react';
+import { Home, ListChecks, Bookmark, User, Info } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export const BottomNav = () => {
   const { t } = useLanguage();
+  const getActiveTab = () => {
+  const path = location.pathname;
+  
+  // Главная страница и все что связано с услугами
+  if (path === '/' || path === '/services' || path.startsWith('/services')) {
+    return '/';
+  }
+  
+  // Списки
+  if (path.startsWith('/lists')) {
+    return 'lists';
+  }
+  
+  // Сохраненное
+  if (path.startsWith('/saved')) {
+    return 'saved';
+  }
+  
+  // Инфо - все информационные разделы
+  if (path.startsWith('/documents') || 
+      path.startsWith('/nhs') || 
+      path.startsWith('/jobs') || 
+      path.startsWith('/housing') || 
+      path.startsWith('/benefits') || 
+      path.startsWith('/education') ||
+      path.startsWith('/about') ||
+      path.startsWith('/faq')) {
+    return 'info';
+  }
+  
+  // Аккаунт
+  if (path.startsWith('/account') || 
+      path.startsWith('/my-profile') ||
+      path.startsWith('/my-services') ||
+      path.startsWith('/add-service') ||
+      path.startsWith('/edit-service') ||
+      path.startsWith('/business-registration')||
+      path.startsWith('/statistics')) {
+    return 'account';
+  }
+  
+  return null; // По умолчанию
+};
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border safe-area-inset-bottom">
@@ -18,12 +61,12 @@ export const BottomNav = () => {
         </NavLink>
         
         <NavLink
-          to="/checklists"
+          to="/lists"
           className="flex flex-col items-center justify-center flex-1 h-full text-muted-foreground transition-colors"
           activeClassName="text-primary"
         >
-          <CheckSquare className="w-5 h-5 mb-1" />
-          <span className="text-xs font-medium">{t('nav.checklists')}</span>
+          <ListChecks className="w-5 h-5 mb-1" />
+          <span className="text-xs font-medium">{t('nav.lists')}</span>
         </NavLink>
         
         <NavLink
@@ -36,7 +79,7 @@ export const BottomNav = () => {
         </NavLink>
 
         <NavLink
-          to="/services"
+          to="/info"
           className="flex flex-col items-center justify-center flex-1 h-full text-muted-foreground transition-colors"
           activeClassName="text-primary"
         >

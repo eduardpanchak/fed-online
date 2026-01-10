@@ -1,88 +1,87 @@
 export interface NHSInfo {
   id: string;
-  title: string;
+  titleKey: string;
   icon: string;
-  content: string[];
-  steps?: string[];
+  contentKeys: string[];
+  stepsKeys?: string[];
 }
 
 export const nhsData: NHSInfo[] = [
   {
     id: 'find-gp',
-    title: 'How to Find a GP',
+    titleKey: 'nhs.findGp.title',
     icon: '🔍',
-    content: [
-      'A GP (General Practitioner) is your main doctor in the UK.',
-      'You need to register with a GP surgery near your home.',
-      'All NHS services start with your GP - they refer you to specialists.'
+    contentKeys: [
+      'nhs.findGp.content1',
+      'nhs.findGp.content2',
+      'nhs.findGp.content3'
     ],
-    steps: [
-      'Go to nhs.uk and use the "Find a GP" tool',
-      'Enter your postcode to see nearby surgeries',
-      'Check if they are accepting new patients',
-      'Visit the surgery or register online',
-      'Bring proof of address and ID'
+    stepsKeys: [
+      'nhs.findGp.step1',
+      'nhs.findGp.step2',
+      'nhs.findGp.step3',
+      'nhs.findGp.step4',
+      'nhs.findGp.step5'
     ]
   },
   {
     id: 'register',
-    title: 'How to Register',
+    titleKey: 'nhs.register.title',
     icon: '📋',
-    content: [
-      'Registration is FREE for everyone, regardless of visa status.',
-      'You don\'t need proof of address or ID, but it helps.',
-      'You can register even if you\'re homeless or an asylum seeker.'
+    contentKeys: [
+      'nhs.register.content1',
+      'nhs.register.content2',
+      'nhs.register.content3'
     ],
-    steps: [
-      'Visit your chosen GP surgery',
-      'Ask for form GMS1 (or fill it online)',
-      'Provide ID and address if possible',
-      'Submit the form',
-      'Wait for confirmation letter with your NHS number'
+    stepsKeys: [
+      'nhs.register.step1',
+      'nhs.register.step2',
+      'nhs.register.step3',
+      'nhs.register.step4',
+      'nhs.register.step5'
     ]
   },
   {
     id: 'free',
-    title: 'What is Free',
+    titleKey: 'nhs.free.title',
     icon: '💚',
-    content: [
-      '✅ GP appointments',
-      '✅ Emergency treatment (A&E)',
-      '✅ Treatment for certain infectious diseases',
-      '✅ Family planning services',
-      '❌ Prescriptions (£9.90 per item in England)',
-      '❌ Dental treatment (unless exempt)',
-      '❌ Eye tests (unless exempt)',
-      '',
-      'If you paid the Immigration Health Surcharge (IHS), you get full NHS access.'
+    contentKeys: [
+      'nhs.free.content1',
+      'nhs.free.content2',
+      'nhs.free.content3',
+      'nhs.free.content4',
+      'nhs.free.content5',
+      'nhs.free.content6',
+      'nhs.free.content7',
+      'nhs.free.content8',
+      'nhs.free.content9'
     ]
   },
   {
     id: 'emergency',
-    title: 'Emergency / Urgent Care',
+    titleKey: 'nhs.emergency.title',
     icon: '🚨',
-    content: [
-      '🚑 999 - Life-threatening emergencies only',
-      '🏥 A&E (Accident & Emergency) - Serious injuries or sudden illness',
-      '🩺 111 - Non-emergency medical advice (24/7)',
-      '⚕️ Walk-in centres - Minor injuries and illnesses',
-      '💊 Pharmacies - Free advice and some treatments'
+    contentKeys: [
+      'nhs.emergency.content1',
+      'nhs.emergency.content2',
+      'nhs.emergency.content3',
+      'nhs.emergency.content4',
+      'nhs.emergency.content5'
     ]
   },
   {
     id: 'nhs-number',
-    title: 'NHS Number',
+    titleKey: 'nhs.nhsNumber.title',
     icon: '🔢',
-    content: [
-      'Your NHS number is a unique 10-digit number.',
-      'You get it when you register with a GP.',
-      'You\'ll need it for appointments, prescriptions, and hospital visits.',
-      '',
-      'Find your NHS number on:',
-      '• GP registration letter',
-      '• Prescriptions',
-      '• Hospital appointment letters',
-      '• NHS app'
+    contentKeys: [
+      'nhs.nhsNumber.content1',
+      'nhs.nhsNumber.content2',
+      'nhs.nhsNumber.content3',
+      'nhs.nhsNumber.content4',
+      'nhs.nhsNumber.content5',
+      'nhs.nhsNumber.content6',
+      'nhs.nhsNumber.content7',
+      'nhs.nhsNumber.content8'
     ]
   }
 ];

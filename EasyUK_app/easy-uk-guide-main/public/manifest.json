@@ -1,7 +1,7 @@
 {
-  "name": "Easy UK - Migrant Assistant",
+  "name": "Locsy - Local services in your language",
   "short_name": "Easy UK",
-  "description": "A simple, fast assistant for migrants living in the UK",
+  "description": "All you local services, and simple, fast assistant for migrants.",
   "theme_color": "#3CAED5",
   "background_color": "#F8FAFC",
   "display": "standalone",
@@ -10,13 +10,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icon-512.png",
+      "src": "/Locsy_logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/Locsy_logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

@@ -5,6 +5,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/i18n';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import FloatingIcons from '@/components/FloatingIcons';
+import { MapPin } from "lucide-react";
 
 export default function Start() {
   const navigate = useNavigate();
@@ -33,19 +35,26 @@ export default function Start() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/70 flex flex-col items-center justify-center px-4 overflow-hidden relative">
       <div className="w-full max-w-md flex flex-col items-center">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+        <FloatingIcons />
+        </div>
         {/* Logo that slides up */}
-        <div className="text-center mb-8 animate-[slide-up-center_1s_ease-out_0.5s_forwards]">
-          <h1 className="text-6xl md:text-7xl font-bold text-white opacity-0 animate-[fade-in_0.8s_ease-out_forwards]">
-            Easy UK
+        <div className="z-10 flex flex-col text-center mb-8 animate-[slide-up-center_1s_ease-out_0.5s_forwards]">
+          <h1 className="flex justify-center items-center text-6xl md:text-7xl font-bold p-4 text-white opacity-0 animate-[fade-in_0.8s_ease-out_forwards]">
+            L <MapPin
+              className="w-10 h-10 md:w-12 md:h-12 text-white relative top-[12px] animate-pulse"
+              strokeWidth={3}
+            /> csy  
           </h1>
+          <p className="text-white/90 text-lg md:text-xl">
+           Local services in your language 
+          </p>
         </div>
 
         {/* Subtitle that fades in after logo animation */}
-        <div className="text-center mb-8 opacity-0 animate-[fade-in_0.8s_ease-out_1.5s_forwards]">
-          <p className="text-white/90 text-lg md:text-xl">
-            Your assistant for life in the UK
-          </p>
-        </div>
+        {/* <div className="z-10 flex flex-col text-center mb-8 opacity-0 animate-[fade-in_0.8s_ease-out_1.5s_forwards]">
+          
+        </div> */}
 
         {/* Language selection form that appears last */}
         <div className="w-full bg-white/95 backdrop-blur-sm rounded-xl p-6 space-y-6 shadow-2xl opacity-0 animate-[scale-in_0.6s_ease-out_2.2s_forwards]">

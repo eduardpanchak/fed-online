@@ -16,7 +16,7 @@ export default function Checklists() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title={t('nav.checklists')} showSearch />
+      <Header title="Main Checklist" showSearch />
       
       <div className="max-w-md mx-auto px-4 py-6">
         <div className="bg-card border border-border rounded-xl p-4 mb-6">
@@ -51,3 +51,4 @@ export default function Checklists() {
     </div>
   );
 }
+

@@ -59,21 +59,21 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
               <Crown className="w-8 h-8 text-primary" />
             </div>
           </div>
-          <DialogTitle className="text-center">{t('unlockSection')}</DialogTitle>
+          <DialogTitle className="text-center">{t('messages.unlockSection')}</DialogTitle>
           <DialogDescription className="text-center pt-2">
-            {t('proDescription')}
+            {t('messages.proDescription')}
           </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4 pt-4">
           <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center">
             <div className="text-2xl font-bold text-primary">£9.99</div>
-            <div className="text-sm text-muted-foreground">{t('perYear')}</div>
+            <div className="text-sm text-muted-foreground">{t('messages.perYear')}</div>
           </div>
 
           <Button className="w-full" size="lg" onClick={handleUpgrade} disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {t('upgradeToPro')}
+            {t('messages.upgradeToPro')}
           </Button>
 
           <Button 
@@ -81,7 +81,7 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
             className="w-full" 
             onClick={onClose}
           >
-            {t('maybeLater')}
+            {t('messages.maybeLater')}
           </Button>
         </div>
       </DialogContent>

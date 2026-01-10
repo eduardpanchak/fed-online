@@ -1,138 +1,135 @@
 export interface JobGuide {
   id: string;
-  title: string;
+  titleKey: string;
   icon: string;
-  content: string[];
-  tips?: string[];
+  contentKeys: string[];
+  tipsKeys?: string[];
 }
 
 export const jobsData: JobGuide[] = [
   {
     id: 'cv-writing',
-    title: 'UK CV Writing',
+    titleKey: 'jobs.cvWriting.title',
     icon: '📝',
-    content: [
-      '**UK CV Format:**',
-      '• Maximum 2 pages',
-      '• No photo or personal details (age, marital status)',
-      '• Start with personal statement (2-3 sentences)',
-      '• List experience in reverse chronological order',
-      '• Focus on achievements, not just duties',
-      '• Include relevant skills and qualifications',
-      '',
-      '**What to Include:**',
-      '✅ Full name and contact details',
-      '✅ Personal statement',
-      '✅ Work experience (with achievements)',
-      '✅ Education and qualifications',
-      '✅ Skills (technical and soft skills)',
-      '✅ References (or "Available upon request")',
-      '',
-      '❌ Photo, date of birth, marital status',
-      '❌ National Insurance Number',
-      '❌ Long paragraphs (use bullet points)'
+    contentKeys: [
+      'jobs.cvWriting.content1',
+      'jobs.cvWriting.content2',
+      'jobs.cvWriting.content3',
+      'jobs.cvWriting.content4',
+      'jobs.cvWriting.content5',
+      'jobs.cvWriting.content6',
+      'jobs.cvWriting.content7',
+      'jobs.cvWriting.content8',
+      'jobs.cvWriting.content9',
+      'jobs.cvWriting.content10',
+      'jobs.cvWriting.content11',
+      'jobs.cvWriting.content12',
+      'jobs.cvWriting.content13',
+      'jobs.cvWriting.content14',
+      'jobs.cvWriting.content15',
+      'jobs.cvWriting.content16',
+      'jobs.cvWriting.content17',
+      'jobs.cvWriting.content18',
+      'jobs.cvWriting.content19'
     ],
-    tips: [
-      'Tailor your CV for each job application',
-      'Use action verbs: achieved, managed, developed',
-      'Quantify achievements with numbers where possible',
-      'Check spelling and grammar carefully',
-      'Save as PDF with clear filename: FirstName_LastName_CV.pdf'
+    tipsKeys: [
+      'jobs.cvWriting.tip1',
+      'jobs.cvWriting.tip2',
+      'jobs.cvWriting.tip3',
+      'jobs.cvWriting.tip4',
+      'jobs.cvWriting.tip5'
     ]
   },
   {
     id: 'job-search',
-    title: 'Where to Find Jobs',
+    titleKey: 'jobs.jobSearch.title',
     icon: '🔍',
-    content: [
-      '**Online Job Boards:**',
-      '• Indeed.co.uk - Largest UK job site',
-      '• Reed.co.uk - Wide range of sectors',
-      '• TotalJobs.co.uk - All industries',
-      '• CV-Library.co.uk - Upload CV, get matches',
-      '• LinkedIn - Professional networking',
-      '',
-      '**Recruitment Agencies:**',
-      '• Hays, Reed, Manpower, Adecco',
-      '• Specialist agencies for your industry',
-      '• Many offer temporary-to-permanent roles',
-      '',
-      '**Company Websites:**',
-      '• Apply directly through company career pages',
-      '• Often better response rates',
-      '• Shows genuine interest in the company'
+    contentKeys: [
+      'jobs.jobSearch.content1',
+      'jobs.jobSearch.content2',
+      'jobs.jobSearch.content3',
+      'jobs.jobSearch.content4',
+      'jobs.jobSearch.content5',
+      'jobs.jobSearch.content6',
+      'jobs.jobSearch.content7',
+      'jobs.jobSearch.content8',
+      'jobs.jobSearch.content9',
+      'jobs.jobSearch.content10',
+      'jobs.jobSearch.content11',
+      'jobs.jobSearch.content12',
+      'jobs.jobSearch.content13',
+      'jobs.jobSearch.content14',
+      'jobs.jobSearch.content15'
     ],
-    tips: [
-      'Set up job alerts on multiple sites',
-      'Apply within 48 hours of job posting',
-      'Follow up after 1 week if no response',
-      'Network on LinkedIn with UK professionals',
-      'Attend job fairs and networking events'
+    tipsKeys: [
+      'jobs.jobSearch.tip1',
+      'jobs.jobSearch.tip2',
+      'jobs.jobSearch.tip3',
+      'jobs.jobSearch.tip4',
+      'jobs.jobSearch.tip5'
     ]
   },
   {
     id: 'interviews',
-    title: 'Job Interviews',
+    titleKey: 'jobs.interviews.title',
     icon: '🤝',
-    content: [
-      '**Types of Interviews:**',
-      '• Phone screening (15-30 mins)',
-      '• Video interview (Teams/Zoom)',
-      '• Face-to-face interview',
-      '• Assessment centre (group tasks)',
-      '',
-      '**Common Questions:**',
-      '• Tell me about yourself',
-      '• Why do you want this job?',
-      '• What are your strengths/weaknesses?',
-      '• Describe a challenging situation you handled',
-      '• Where do you see yourself in 5 years?',
-      '',
-      '**STAR Method:**',
-      'Use this to answer behavioral questions:',
-      '**S**ituation - Set the scene',
-      '**T**ask - Explain your responsibility',
-      '**A**ction - Describe what you did',
-      '**R**esult - Share the outcome'
+    contentKeys: [
+      'jobs.interviews.content1',
+      'jobs.interviews.content2',
+      'jobs.interviews.content3',
+      'jobs.interviews.content4',
+      'jobs.interviews.content5',
+      'jobs.interviews.content6',
+      'jobs.interviews.content7',
+      'jobs.interviews.content8',
+      'jobs.interviews.content9',
+      'jobs.interviews.content10',
+      'jobs.interviews.content11',
+      'jobs.interviews.content12',
+      'jobs.interviews.content13',
+      'jobs.interviews.content14',
+      'jobs.interviews.content15',
+      'jobs.interviews.content16',
+      'jobs.interviews.content17',
+      'jobs.interviews.content18'
     ],
-    tips: [
-      'Research the company thoroughly',
-      'Prepare 3-5 questions to ask the interviewer',
-      'Dress smartly (business or business casual)',
-      'Arrive 10-15 minutes early',
-      'Send a thank-you email within 24 hours',
-      'Practice answers but don\'t memorize word-for-word'
+    tipsKeys: [
+      'jobs.interviews.tip1',
+      'jobs.interviews.tip2',
+      'jobs.interviews.tip3',
+      'jobs.interviews.tip4',
+      'jobs.interviews.tip5',
+      'jobs.interviews.tip6'
     ]
   },
   {
     id: 'rights',
-    title: 'Worker Rights',
+    titleKey: 'jobs.rights.title',
     icon: '⚖️',
-    content: [
-      '**Minimum Rights in the UK:**',
-      '✅ National Minimum Wage (currently £11.44/hour for 21+)',
-      '✅ 5.6 weeks paid holiday per year (28 days for full-time)',
-      '✅ Rest breaks (20 mins for 6+ hour shifts)',
-      '✅ Protection from discrimination',
-      '✅ Safe working environment',
-      '✅ Payslips showing deductions',
-      '',
-      '**Employment Contract:**',
-      '• Must be provided within 2 months',
-      '• Should include: job title, salary, hours, holiday',
-      '• Read carefully before signing',
-      '',
-      '**Notice Periods:**',
-      '• Minimum 1 week after 1 month of employment',
-      '• Longer if stated in contract',
-      '• You must also give notice when leaving'
+    contentKeys: [
+      'jobs.rights.content1',
+      'jobs.rights.content2',
+      'jobs.rights.content3',
+      'jobs.rights.content4',
+      'jobs.rights.content5',
+      'jobs.rights.content6',
+      'jobs.rights.content7',
+      'jobs.rights.content8',
+      'jobs.rights.content9',
+      'jobs.rights.content10',
+      'jobs.rights.content11',
+      'jobs.rights.content12',
+      'jobs.rights.content13',
+      'jobs.rights.content14',
+      'jobs.rights.content15',
+      'jobs.rights.content16'
     ],
-    tips: [
-      'Keep copies of all employment documents',
-      'Check your payslips match your contract',
-      'Join a union for additional protection',
-      'Report issues to ACAS (free advice service)',
-      'Know your visa work restrictions if applicable'
+    tipsKeys: [
+      'jobs.rights.tip1',
+      'jobs.rights.tip2',
+      'jobs.rights.tip3',
+      'jobs.rights.tip4',
+      'jobs.rights.tip5'
     ]
   }
 ];

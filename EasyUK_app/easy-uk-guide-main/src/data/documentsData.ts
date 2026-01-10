@@ -1,147 +1,148 @@
 export interface Document {
   id: string;
-  title: string;
+  titleKey: string;
   icon: string;
-  whatYouNeed: string[];
-  steps: string[];
-  expectedTime: string;
-  warnings: string[];
+  whatYouNeedKeys: string[];
+  stepsKeys: string[];
+  expectedTimeKey: string;
+  warningsKeys: string[];
 }
 
 export const documentsData: Document[] = [
   {
     id: 'nin',
-    title: 'National Insurance Number',
+    titleKey: 'documents.nin.title',
     icon: '🔢',
-    whatYouNeed: [
-      'Proof of identity (passport)',
-      'Proof of address (utility bill or tenancy agreement)',
-      'Proof of right to work in the UK (visa/BRP)'
+    whatYouNeedKeys: [
+      'documents.nin.need1',
+      'documents.nin.need2',
+      'documents.nin.need3'
     ],
-    steps: [
-      'Call the NIN application line: 0800 141 2075',
-      'Answer questions about your identity and work status',
-      'Book a phone or face-to-face appointment if required',
-      'Receive your NIN by post within 3 weeks'
+    stepsKeys: [
+      'documents.nin.step1',
+      'documents.nin.step2',
+      'documents.nin.step3',
+      'documents.nin.step4'
     ],
-    expectedTime: '2-3 weeks',
-    warnings: [
-      'You can start work before receiving your NIN',
-      'Keep your NIN safe - you\'ll need it for life',
-      'Don\'t share your NIN with anyone except official bodies'
+    expectedTimeKey: 'documents.nin.expectedTime',
+    warningsKeys: [
+      'documents.nin.warning1',
+      'documents.nin.warning2',
+      'documents.nin.warning3'
     ]
   },
   {
     id: 'bank',
-    title: 'Bank Account',
+    titleKey: 'documents.bank.title',
     icon: '🏦',
-    whatYouNeed: [
-      'Passport or driving licence',
-      'Proof of address (less than 3 months old)',
-      'BRP card or visa documents'
+    whatYouNeedKeys: [
+      'documents.bank.need1',
+      'documents.bank.need2',
+      'documents.bank.need3'
     ],
-    steps: [
-      'Choose a bank (Lloyds, HSBC, Barclays, Monzo, Revolut)',
-      'Book an appointment or apply online',
-      'Bring your documents to the branch/upload online',
-      'Wait 5-10 days for your card to arrive'
+    stepsKeys: [
+      'documents.bank.step1',
+      'documents.bank.step2',
+      'documents.bank.step3',
+      'documents.bank.step4'
     ],
-    expectedTime: '1-2 weeks',
-    warnings: [
-      'Some banks require proof of address, which can be difficult initially',
-      'Consider digital banks (Monzo, Revolut) for faster setup',
-      'You may need a NIN for some accounts'
+    expectedTimeKey: 'documents.bank.expectedTime',
+    warningsKeys: [
+      'documents.bank.warning1',
+      'documents.bank.warning2',
+      'documents.bank.warning3'
     ]
   },
   {
     id: 'brp',
-    title: 'BRP / Visa Status',
+    titleKey: 'documents.brp.title',
     icon: '🪪',
-    whatYouNeed: [
-      'Your passport',
-      'Decision letter from Home Office',
-      'Collection appointment confirmation'
+    whatYouNeedKeys: [
+      'documents.brp.need1',
+      'documents.brp.need2',
+      'documents.brp.need3'
     ],
-    steps: [
-      'Check your visa decision letter for collection details',
-      'Visit the Post Office or collection point within 10 days',
-      'Bring your passport and decision letter',
-      'Collect your BRP card and check all details are correct'
+    stepsKeys: [
+      'documents.brp.step1',
+      'documents.brp.step2',
+      'documents.brp.step3',
+      'documents.brp.step4'
     ],
-    expectedTime: 'Within 10 days of arrival',
-    warnings: [
-      'You must collect your BRP within 10 days',
-      'Check all details on the card immediately',
-      'Report any errors to the Home Office within 10 days',
-      'Keep your BRP safe - replacements cost £56'
+    expectedTimeKey: 'documents.brp.expectedTime',
+    warningsKeys: [
+      'documents.brp.warning1',
+      'documents.brp.warning2',
+      'documents.brp.warning3',
+      'documents.brp.warning4'
     ]
   },
   {
     id: 'gp',
-    title: 'GP Registration',
+    titleKey: 'documents.gp.title',
     icon: '🏥',
-    whatYouNeed: [
-      'Proof of address',
-      'Passport or ID',
-      'NHS number (if you have one)'
+    whatYouNeedKeys: [
+      'documents.gp.need1',
+      'documents.gp.need2',
+      'documents.gp.need3'
     ],
-    steps: [
-      'Find a GP surgery near you on nhs.uk',
-      'Visit the surgery or register online',
-      'Fill in the registration form (GMS1)',
-      'Wait for confirmation and your NHS number'
+    stepsKeys: [
+      'documents.gp.step1',
+      'documents.gp.step2',
+      'documents.gp.step3',
+      'documents.gp.step4'
     ],
-    expectedTime: '1-2 weeks',
-    warnings: [
-      'Registration is free regardless of visa status',
-      'You can use NHS services while waiting for registration',
-      'Emergency treatment is always free'
+    expectedTimeKey: 'documents.gp.expectedTime',
+    warningsKeys: [
+      'documents.gp.warning1',
+      'documents.gp.warning2',
+      'documents.gp.warning3'
     ]
   },
   {
     id: 'council-tax',
-    title: 'Council Tax',
+    titleKey: 'documents.councilTax.title',
     icon: '🏘️',
-    whatYouNeed: [
-      'Tenancy agreement',
-      'Proof of occupancy',
-      'Details of other adults living with you'
+    whatYouNeedKeys: [
+      'documents.councilTax.need1',
+      'documents.councilTax.need2',
+      'documents.councilTax.need3'
     ],
-    steps: [
-      'Find your local council on gov.uk',
-      'Register within 2 weeks of moving in',
-      'Check if you qualify for discounts (students, single occupancy)',
-      'Set up payment method (usually monthly direct debit)'
+    stepsKeys: [
+      'documents.councilTax.step1',
+      'documents.councilTax.step2',
+      'documents.councilTax.step3',
+      'documents.councilTax.step4'
     ],
-    expectedTime: 'Register within 2 weeks',
-    warnings: [
-      'Full-time students are exempt from council tax',
-      'Single occupants get 25% discount',
-      'Not registering can lead to fines'
+    expectedTimeKey: 'documents.councilTax.expectedTime',
+    warningsKeys: [
+      'documents.councilTax.warning1',
+      'documents.councilTax.warning2',
+      'documents.councilTax.warning3'
     ]
   },
   {
     id: 'driving-licence',
-    title: 'Driving Licence',
+    titleKey: 'documents.drivingLicence.title',
     icon: '🚗',
-    whatYouNeed: [
-      'Valid passport',
-      'Proof of UK address',
-      'Current driving licence (if exchanging)',
-      'Fee payment (£43)'
+    whatYouNeedKeys: [
+      'documents.drivingLicence.need1',
+      'documents.drivingLicence.need2',
+      'documents.drivingLicence.need3',
+      'documents.drivingLicence.need4'
     ],
-    steps: [
-      'Check if you can exchange your licence on gov.uk',
-      'Apply online at gov.uk/apply-first-provisional-driving-licence',
-      'Send your documents by post',
-      'Wait for your UK licence (usually 3 weeks)'
+    stepsKeys: [
+      'documents.drivingLicence.step1',
+      'documents.drivingLicence.step2',
+      'documents.drivingLicence.step3',
+      'documents.drivingLicence.step4'
     ],
-    expectedTime: '3-4 weeks',
-    warnings: [
-      'You can drive on some foreign licences for 12 months',
-      'Ukrainian licences can be exchanged without retaking tests',
-      'EU licences can no longer be exchanged - must take UK test',
-      'Keep your receipt as proof while waiting'
+    expectedTimeKey: 'documents.drivingLicence.expectedTime',
+    warningsKeys: [
+      'documents.drivingLicence.warning1',
+      'documents.drivingLicence.warning2',
+      'documents.drivingLicence.warning3',
+      'documents.drivingLicence.warning4'
     ]
   }
 ];
+
