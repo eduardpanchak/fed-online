@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
@@ -8,7 +8,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useFilters } from '@/contexts/FilterContext';
 import { supabase } from '@/integrations/supabase/client';
 import { advertisingService, Advertisement } from '@/services/advertisingService';
-import { Loader2, MapPin, Search, Save, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { Loader2, MapPin, Search, Save, X, ChevronUp, ChevronDown, Globe, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -16,6 +16,8 @@ import { calculateDistance, geocodePostcode, RADIUS_OPTIONS } from '@/lib/geocod
 import { useToast } from '@/hooks/use-toast';
 import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
 import RotatingAdCard from '@/components/RotatingAdCard';
+import { LONDON_BOROUGHS } from '@/lib/ukLocation';
+// import { set } from 'date-fns';
 
 interface Service {
   id: string;
@@ -30,6 +32,8 @@ interface Service {
   longitude: number | null;
   postcode: string | null;
   city: string | null;
+  country: string | null;
+  borough: string | null;
 }
 
 interface ServiceWithDistance extends Service {  
@@ -51,13 +55,23 @@ const ADS_INTERVAL = 5; // Show an ad every 5 service cards
 
 export default function Services() {
   const { language, t } = useLanguage();
-  const { filters, setFilters } = useFilters();
+  const { 
+    filters, 
+    setFilters, 
+    orderSeed, 
+    scrollState, 
+    saveScrollPosition, 
+    markStateRestored,
+    cachedServices,
+    setCachedServices, 
+  } = useFilters();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [services, setServices] = useState<Service[]>([]);
+  const [services, setServices] = useState<Service[]>(cachedServices);
   const [ads, setAds] = useState<Advertisement[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!scrollState.hasRestoredState || cachedServices.length === 0);
   const [isGeocodingPostcode, setIsGeocodingPostcode] = useState(false);
+   const hasRestoredScrollRef = useRef(false);
   
   
   // Local state synced with context
@@ -70,12 +84,74 @@ export default function Services() {
   const [userLat, setUserLat] = useState<number | null>(filters.userLat);
   const [userLng, setUserLng] = useState<number | null>(filters.userLng);
   const [selectedLanguageFilter, setSelectedLanguageFilter] = useState<string[]>(filters.selectLangugages);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(filters.selectedCountry || 'all');
+  const [selectedBorough, setSelectedBorough] = useState(filters.selectedBorough);
 
   useEffect(() => {
+     if (!scrollState.hasRestoredState || cachedServices.length === 0) {
     fetchServices();
     fetchAds();
     loadSavedFilters();
+  } else {
+      // We have saved state - just load ads
+      fetchAds();
+    }
+  }, [orderSeed]);
+
+ useEffect(() => {
+  if (!("scrollRestoration" in window.history)) return;
+  const prev = window.history.scrollRestoration;
+  window.history.scrollRestoration = "manual";
+  return () => { window.history.scrollRestoration = prev; };
+}, []);
+
+  // Restore scroll position after list renders
+  useLayoutEffect(() => {
+  const shouldRestore = sessionStorage.getItem("services_shouldRestore") === "1";
+  const saved = Number(sessionStorage.getItem("services_scrollY") || "0");
+
+  if (!shouldRestore || saved <= 0) return;
+  if (loading) return;
+  if (services.length === 0) return;
+
+  // restore 1 time per mount
+  if (hasRestoredScrollRef.current) return;
+  hasRestoredScrollRef.current = true;
+
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: saved, left: 0, behavior: "auto" });
+
+    // second kick after layout shifts (images/ads)
+    setTimeout(() => {
+      window.scrollTo({ top: saved, left: 0, behavior: "auto" });
+
+      sessionStorage.removeItem("services_shouldRestore");
+      markStateRestored();
+    }, 250);
+  });
+}, [loading, services.length, markStateRestored]);
+
+
+  // Reset the scroll restoration ref when component unmounts
+  useEffect(() => {
+    return () => {
+      hasRestoredScrollRef.current = false;
+    };
   }, []);
+
+  const handleServiceClick = (serviceId: string) => {
+  const pos = window.scrollY;
+
+  sessionStorage.setItem("services_scrollY", String(pos));
+  sessionStorage.setItem("services_shouldRestore", "1");
+
+  saveScrollPosition(pos);
+  setCachedServices(services);
+
+  navigate(`/services/${serviceId}`);
+};
+
 
   const fetchAds = async () => {
     try {
@@ -85,6 +161,62 @@ export default function Services() {
       console.error('Error fetching ads:', error);
     }
   };
+
+  // Filter and sort ads based on country, borough, and location
+  const filteredAds = useMemo(() => {
+    if (ads.length === 0) return [];
+    
+    // First apply country and borough filters
+    const filtered = ads.filter(ad => {
+      // Country filter
+      if (selectedCountry !== 'all') {
+        const adCountry = ad.country?.toLowerCase() || '';
+        const isUK = adCountry.includes('united kingdom') || adCountry === 'gb';
+        if (selectedCountry === 'gb' && !isUK) {
+          return false;
+        }
+      }
+      
+      // Borough filter - ads store borough in city field
+      if (selectedBorough !== 'all') {
+        if (ad.city !== selectedBorough) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+
+    // Check if location search is active (user coords exist)
+    const locationSearchActive = userLat !== null && userLng !== null;
+    
+    if (!locationSearchActive) {
+      // No location search - return filtered ads in original order
+      return filtered;
+    }
+
+    // Location search is active - sort by distance
+    // Separate ads with valid coords from those without
+    const adsWithCoords = filtered.filter(ad => 
+      ad.latitude !== null && ad.latitude !== undefined && 
+      ad.longitude !== null && ad.longitude !== undefined
+    );
+    const adsWithoutCoords = filtered.filter(ad => 
+      ad.latitude === null || ad.latitude === undefined || 
+      ad.longitude === null || ad.longitude === undefined
+    );
+
+    // Sort ads with coords by distance (closest first)
+    const sortedByDistance = adsWithCoords
+      .map(ad => ({
+        ...ad,
+        distance: calculateDistance(userLat, userLng, ad.latitude!, ad.longitude!)
+      }))
+      .sort((a, b) => a.distance - b.distance);
+
+    // Return nearby ads first, then fill with remaining ads
+    return [...sortedByDistance, ...adsWithoutCoords];
+  }, [ads, selectedCountry, selectedBorough, userLat, userLng]);
 
   // Sync local state with context on change
   useEffect(() => {
@@ -98,8 +230,10 @@ export default function Services() {
       searchRadius,
       userLat,
       userLng,
+      selectedCountry,
+      selectedBorough,
     });
-  }, [searchText, selectedCategory, sortBy, showNearby, selectedLanguageFilter, searchPostcode, searchRadius, userLat, userLng, setFilters]);
+  }, [searchText, selectedCategory, sortBy, showNearby, selectedLanguageFilter, searchPostcode, searchRadius, userLat, userLng, selectedCountry, selectedBorough, setFilters]);
 
   const loadSavedFilters = () => {
     try {
@@ -115,6 +249,8 @@ export default function Services() {
         setSearchRadius(savedFilters.searchRadius || 10);
         setUserLat(savedFilters.userLat || null);
         setUserLng(savedFilters.userLng || null);
+        setSelectedCountry(savedFilters.selectedCountry || 'all');
+        setSelectedBorough(savedFilters.selectedBorough || 'all');
       }
     } catch (error) {
       console.error('Error loading saved filters:', error);
@@ -133,6 +269,8 @@ export default function Services() {
         searchRadius,
         userLat,
         userLng,
+        selectedCountry,
+        selectedBorough,
       };
       localStorage.setItem(SAVED_FILTERS_KEY, JSON.stringify(filterData));
       toast({
@@ -155,6 +293,8 @@ export default function Services() {
       setSearchRadius(10);
       setUserLat(null);
       setUserLng(null);
+      setSelectedCountry('all');
+      setSelectedBorough('all');
       toast({
         title: t('services.filterCleared'),
       });
@@ -199,21 +339,58 @@ export default function Services() {
     }
   };
 
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      toast({
+        title: t('services.geolocationNotSupported'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsGettingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLat(position.coords.latitude);
+        setUserLng(position.coords.longitude);
+        setShowNearby(true);
+        setSearchPostcode(''); // Clear postcode since we're using GPS
+        setIsGettingLocation(false);
+        toast({
+          title: t('services.locationFound'),
+          description: t('services.usingYourLocation'),
+        });
+      },
+      (error) => {
+        setIsGettingLocation(false);
+        console.warn('Geolocation error:', error.message);
+        toast({
+          title: t('services.locationError'),
+          description: error.code === 1 
+            ? t('services.locationPermissionDenied') 
+            : t('services.locationUnavailable'),
+          variant: 'destructive',
+        });
+      },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+    );
+  };
+
   const fetchServices = async () => {
     try {
       setLoading(true);
+      // Use server-side seeded ordering function
       const { data, error } = await supabase
-        .from('services')
-        .select('id, service_name, description, category, pricing, photos, languages, subscription_tier, latitude, longitude, postcode, city')
-        .in('status', ['active', 'trial'])
-        .order('created_at', { ascending: false });
+        .rpc('get_services_seeded_order', { seed_value: orderSeed });
 
       if (error) {
         console.error('Error fetching services:', error);
         return;
       }
 
-     setServices(data || []);
+      const serviceData = data || [];
+      setServices(serviceData);
+      setCachedServices(serviceData);
     } catch (error) {
       console.error('Error fetching services:', error);
     } finally {
@@ -240,6 +417,21 @@ export default function Services() {
       
       // Category filter
       if (selectedCategory !== 'all' && service.category !== selectedCategory) {
+        return false;
+      }
+
+       // Country filter
+      if (selectedCountry !== 'all') {
+        // Match services with "United Kingdom" or "GB" country
+        const serviceCountry = service.country?.toLowerCase() || '';
+        const isUK = serviceCountry.includes('united kingdom') || serviceCountry === 'gb';
+        if (selectedCountry === 'gb' && !isUK) {
+          return false;
+        }
+      }
+
+       // Borough filter - match against borough field
+      if (selectedBorough !== 'all' && service.borough !== selectedBorough) {
         return false;
       }
 
@@ -278,35 +470,35 @@ export default function Services() {
         s.distance !== null && s.distance > searchRadius && s.distance <= searchRadius + 20
       );
 
-      // If nothing within radius, show nearest anyway
+      // Services without coordinates - include at the end, not excluded
+      const withoutCoords = filtered.filter(s => s.distance === null);
+
+      // If nothing within radius, show nearest with coords first, then those without
       if (withinRadius.length === 0 && nearbyRange.length === 0) {
         const withLocation = filtered.filter(s => s.distance !== null);
         return {
-          servicesWithinRadius: withLocation.slice(0, 10),
+          servicesWithinRadius: [...withLocation.slice(0, 10), ...withoutCoords],
           servicesNearby: [],
         };
       }
 
       return {
-        servicesWithinRadius: withinRadius,
+        servicesWithinRadius: [...withinRadius, ...withoutCoords],
         servicesNearby: nearbyRange,
       };
     }
 
-    // Apply regular sorting
-    filtered = filtered.sort((a, b) => {
-      if (sortBy === 'price') {
+    // Apply client-side sorting only for price; otherwise preserve server order (premium first, seeded random)
+    if (sortBy === 'price') {
+      filtered = filtered.sort((a, b) => {
         const priceA = parseFloat(a.pricing?.replace(/[^0-9.]/g, '') || '0');
         const priceB = parseFloat(b.pricing?.replace(/[^0-9.]/g, '') || '0');
         return priceA - priceB;
-      }
-      // Default: Premium first
-      const aIsPremium = a.subscription_tier === 'top' || a.subscription_tier === 'premium';
-      const bIsPremium = b.subscription_tier === 'top' || b.subscription_tier === 'premium';
-      if (aIsPremium && !bIsPremium) return -1;
-      if (!aIsPremium && bIsPremium) return 1;
-      return 0;
-    });
+      });
+    }
+    // For 'newest' or default, we preserve the server-side order which is already:
+    // 1. Premium/top tier first
+    // 2. Within each tier: seeded pseudo-random order
 
     return {
       servicesWithinRadius: filtered,
@@ -402,6 +594,20 @@ export default function Services() {
                 )}
               </Button>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full"
+              onClick={handleUseMyLocation}
+              disabled={isGettingLocation}
+            >
+              {isGettingLocation ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                  <Navigation className="h-4 w-4 mr-2" />
+              )}
+                  {t('services.useMyLocation')}
+            </Button>
             {showNearby && userLat && userLng && (
               <div className="flex gap-2 items-center">
                 <label className="text-sm text-muted-foreground">{t('services.radius')}:</label>
@@ -477,6 +683,37 @@ export default function Services() {
               </SelectContent>
             </Select>
             </div>
+          </div>
+
+          {/* Country and Borough Filters */}
+          <div className="flex gap-2 items-center flex-wrap">
+            {/* Country Filter */}
+            <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+              <SelectTrigger className="w-full h-9">
+                <SelectValue placeholder={t('services.country')} />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="all">{t('services.allCountries')}</SelectItem>
+                <SelectItem value="gb">{t('services.unitedKingdom')}</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            {/* Borough Filter - only show when UK is selected */}
+            {selectedCountry === 'gb' && (
+              <Select value={selectedBorough} onValueChange={setSelectedBorough}>
+                <SelectTrigger className="w-full h-9">
+                  <SelectValue placeholder={t('services.allBoroughs')} />
+                </SelectTrigger>
+                <SelectContent className="bg-background z-50 max-h-[300px]">
+                  <SelectItem value="all">{t('services.allBoroughs')}</SelectItem>
+                  {LONDON_BOROUGHS.map((borough) => (
+                    <SelectItem key={borough.value} value={borough.value}>
+                      {borough.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
 
           {/* Language Filter */}
@@ -555,13 +792,13 @@ export default function Services() {
                         photo={service.photos?.[0] || null}
                         subscriptionTier={service.subscription_tier}
                         distance={formatDistance(service.distance)}
-                        onClick={() => navigate(`/services/${service.id}`)}
+                        onClick={() => handleServiceClick(service.id)}
                       />
 
                       {/* Рекламный блок каждые ADS_INTERVAL сервисов */}
-                      {(index + 1) % ADS_INTERVAL === 0 && ads.length > 0 && (
+                      {filteredAds.length > 0 && (index + 1) % ADS_INTERVAL === 0 && (
                         <div className="my-4">
-                          <RotatingAdCard ads={getRandomAds(ads, 5)} />
+                          <RotatingAdCard ads={getRandomAds(ads, 5)}/>
                         </div>
                       )}
                     </React.Fragment>
@@ -586,7 +823,7 @@ export default function Services() {
                     photo={service.photos?.[0] || null}
                     subscriptionTier={service.subscription_tier}
                     distance={formatDistance(service.distance)}
-                    onClick={() => navigate(`/services/${service.id}`)}
+                    onClick={() => handleServiceClick(service.id)}
                   />
                 ))}
               </div>

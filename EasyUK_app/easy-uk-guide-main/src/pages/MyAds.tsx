@@ -166,6 +166,14 @@ export default function MyAds() {
   const getStatusBadge = (ad: Advertisement) => {
     const daysRemaining = getDaysRemaining(ad.expires_at);
 
+    if (ad.status === 'payment_required') {
+      return (
+        <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-600">
+          {t('ads.statusPaymentRequired')}
+        </span>
+      );
+    }
+
     if (ad.status === 'pending') {
       return (
         <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-600">
@@ -176,7 +184,7 @@ export default function MyAds() {
 
     if (ad.status === 'expired' || daysRemaining === 0) {
       return (
-        <span className="text-xs px-2 py-0.5 rounded bg-destructive/20 text-destructive">
+        <span className="text-xs px-2 py-0.5 rounded bg-destructive/80 text-wihite">
           {t('ads.statusExpired')}
         </span>
       );
@@ -190,8 +198,17 @@ export default function MyAds() {
       );
     }
 
+        // Show trial badge for trial ads
+    if (ad.is_trial) {
+      return (
+        <span className="text-xs px-2 py-0.5 rounded bg-primary/80 text-white">
+          {t('ads.statusTrial')} ({daysRemaining} {t('ads.daysLeft')})
+        </span>
+      );
+    }
+
     return (
-      <span className="text-xs px-2 py-0.5 rounded bg-primary/20 text-primary">
+      <span className="text-xs px-2 py-0.5 rounded bg-green-500/80 text-white">
         {t('ads.statusActive')}
       </span>
     );
@@ -234,7 +251,7 @@ export default function MyAds() {
                   className="bg-card border border-border rounded-xl overflow-hidden"
                 >
                   {/* Media Preview */}
-                  <div className="relative aspect-video bg-muted">
+                  <div className="relative bg-muted">
                     {ad.media_type === 'photo' ? (
                       <img
                         src={ad.media_url}
@@ -299,20 +316,28 @@ export default function MyAds() {
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Button
-                        variant={ad.is_paid ? "outline" : "default"}
-                        size="sm"
-                        className="flex-1"
-                        onClick={() => handlePayment(ad)}
-                        disabled={processingPayment === ad.id}
-                      >
-                        {processingPayment === ad.id ? (
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        ) : (
-                          <CreditCard className="h-4 w-4 mr-2" />
-                        )}
-                        {ad.is_paid ? t('ads.extendAd') : t('ads.payForAd')} £7.99
-                      </Button>
+                      {/* Show payment button for trial ads, payment_required ads, expired ads, or paid ads that want to extend */}
+                      {(ad.status === 'payment_required' || isExpired || ad.is_paid || (ad.is_trial && !ad.is_paid)) && (
+                        <Button
+                          variant={ad.is_paid && !isExpired ? "outline" : "default"}
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handlePayment(ad)}
+                          disabled={processingPayment === ad.id}
+                        >
+                          {processingPayment === ad.id ? (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          ) : (
+                            <CreditCard className="h-4 w-4 mr-2" />
+                          )}
+                          {ad.status === 'payment_required' 
+                            ? t('ads.payToActivate')
+                            : ad.is_paid 
+                              ? t('ads.extendAd') 
+                              : t('ads.payForAd')
+                          } £7.99
+                        </Button>
+                      )}
                       <Button
                         variant="destructive"
                         size="sm"

@@ -11,7 +11,9 @@ import { Label } from '@/components/ui/label';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
 import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
-import { geocodeAddress, geocodePostcode } from '@/lib/geocoding';
+import { geocodePostcode } from '@/lib/geocoding';
+import { validateUKPostcode, UK_CITIES, LONDON_BOROUGHS, getCityLabel, getBoroughLabel } from '@/lib/ukLocation';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function AddService() {
   const navigate = useNavigate();
@@ -23,7 +25,8 @@ export default function AddService() {
     description: '',
     category: 'repair', // Default category
     address: '',
-    city: '',
+    city: 'london',
+    borough: '',
     postcode: '',
     country: 'United Kingdom',
     price: '',
@@ -32,6 +35,7 @@ export default function AddService() {
     email: '',
     subscriptionTier: 'standard' as 'standard' | 'top', // Default to standard
   });
+  const [postcodeError, setPostcodeError] = useState<string | null>(null);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['en']);
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
@@ -53,6 +57,19 @@ export default function AddService() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+
+    // Clear postcode error when user types
+    if (name === 'postcode') {
+      setPostcodeError(null);
+    }
+    
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -112,6 +129,23 @@ export default function AddService() {
       return;
     }
 
+    // Validate postcode (required and must be valid UK format)
+    if (!formData.postcode.trim()) {
+      setPostcodeError(t('validation.postcodeRequired'));
+      toast.error(t('validation.postcodeRequired'));
+      return;
+    }
+
+    const postcodeValidation = validateUKPostcode(formData.postcode);
+    if (!postcodeValidation.isValid) {
+      setPostcodeError(t('validation.postcodeInvalid'));
+      toast.error(t('validation.postcodeInvalid'));
+      return;
+    }
+
+    // Normalize the postcode
+    const normalizedPostcode = postcodeValidation.normalized;
+
     // Check if photo is still uploading
     if (isUploadingPhoto) {
       toast.error('Please wait until the image is uploaded.');
@@ -138,36 +172,47 @@ export default function AddService() {
       return;
     }
 
-    // Geocode the address if postcode or city provided
-      let lat: number | null = null;
-      let lng: number | null = null;
-      
-      if (formData.postcode) {
-        const geocodeResult = await geocodePostcode(formData.postcode);
-        if (geocodeResult) {
-          lat = geocodeResult.latitude;
-          lng = geocodeResult.longitude;
-        }
-      } else if (formData.city || formData.address) {
-        const geocodeResult = await geocodeAddress(
-          formData.address || '',
-          formData.city,
-          formData.country
-        );
-        if (geocodeResult) {
-          lat = geocodeResult.latitude;
-          lng = geocodeResult.longitude;
-        }
-      }
-
     setIsSubmitting(true);
-
     try {
       console.log('Starting service creation for user:', user.id);
       console.log('User authenticated:', session.user.id);
       console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
-      // Check if premium tier and trial not available
+      // Check if premium tier and trial not available - redirect to payment
+      if (formData.subscriptionTier === 'top' && !isPremiumTrialAvailable) {
+        // Initiate premium payment flow via Stripe
+        try {
+          const { subscriptionService } = await import('@/services/subscriptionService');
+          const { data, error } = await subscriptionService.createServiceSubscription(
+            'pending-service', // Service will be created after payment
+            'premium'
+          );
+          
+          if (error) {
+            toast.error(t('addService.paymentError'));
+            return;
+          }
+          
+          if (data?.url) {
+            // Store service data temporarily for after payment
+            localStorage.setItem('pendingServiceData', JSON.stringify({
+              ...formData,
+              uploadedPhotoUrl,
+              selectedLanguages,
+              location,
+            }));
+            window.open(data.url, '_blank');
+            toast.info(t('addService.redirectingToPayment'));
+          }
+          return;
+        } catch (error) {
+          console.error('Payment initiation error:', error);
+          toast.error(t('addService.paymentError'));
+          return;
+        }
+      }
+
+       // Check if premium tier and trial not available
       if (formData.subscriptionTier === 'top' && !isPremiumTrialAvailable) {
         // Redirect to subscription/payment flow
         toast.error(t('addService.premiumTrialUsed'));
@@ -184,15 +229,29 @@ export default function AddService() {
       const isStandard = formData.subscriptionTier === 'standard';
       const serviceStatus = isStandard ? 'active' : 'trial';
 
+    // Geocode using the validated postcode (postcode is now required)
+      let lat: number | null = null;
+      let lng: number | null = null;
+      
+      const geocodeResult = await geocodePostcode(normalizedPostcode);
+      if (geocodeResult) {
+        lat = geocodeResult.latitude;
+        lng = geocodeResult.longitude;
+      }
+
+      // Get display values for city 
+      const cityLabel = getCityLabel(formData.city) || formData.city;
+      
       const serviceData = {
         user_id: user.id,
         service_name: formData.serviceName,
         description: formData.description,
         category: formData.category,
         address: formData.address || null,
-        city: formData.city || null,
-        postcode: formData.postcode || null,
-        country: formData.country || 'United Kingdom',
+        city: cityLabel || null,
+        borough: formData.borough || null,
+        postcode: normalizedPostcode,
+        country: 'United Kingdom',
         pricing: formData.price || null,
         social_links: formData.website ? { website: formData.website } : {},
         phone: formData.phone || null,
@@ -232,13 +291,13 @@ export default function AddService() {
       }
 
       navigate('/account');
-    } catch (error) {
-      console.error('Error adding service:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      toast.error(`${t('addService.failed')}: ${errorMessage}`);
-    } finally {
-      setIsSubmitting(false);
-    }
+      } catch (error) {
+        console.error('Error adding service:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        toast.error(`${t('addService.failed')}: ${errorMessage}`);
+      } finally {
+        setIsSubmitting(false);
+      }
   };
 
   return (
@@ -340,7 +399,7 @@ export default function AddService() {
           </Label>
           <p className="text-sm text-muted-foreground">{t('addService.tierDescriptionNew')}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* Standard Tier - Free */}
+            {/* Standard Tier - Always Free */}
             <button
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'standard' }))}
@@ -351,33 +410,32 @@ export default function AddService() {
               }`}
             >
               <div className="text-left">
-                <div className="font-semibold text-lg flex item-center gap-2">{t('addService.standardTier')}
-                  <span className="text-xs bg-primary text-white h-4 px-2 mx-3 rounded-full">{t('addService.free')}</span>
+                <div className="font-semibold text-lg flex items-center gap-2">
+                  {t('addService.standardTier')}
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">{t('addService.free')}</span>
                 </div>
-                <div className="text-2xl font-bold text-primary my-2">{t('addService.freeForever')}</div>
+                <div className="text-2xl font-bold text-green-600 my-2">{t('addService.freeForever')}</div>
                 <div className="text-sm text-muted-foreground">{t('addService.standardFeatures')}</div>
               </div>
             </button>
 
-            {/* Top Tier */}
+            {/* Top/Premium Tier */}
             <button
               type="button"
-              onClick={() => !premiumTrialUsed && setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
-              disabled={premiumTrialUsed}
+              onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
               className={`p-4 border-2 rounded-lg transition-all relative ${
                 formData.subscriptionTier === 'top'
                   ? 'border-primary bg-primary/5'
-                  : premiumTrialUsed
-                    ? 'border-border bg-muted/50 opacity-60 cursor-not-allowed'
-                    : 'border-border hover:border-primary/50'
+                  : 'border-border hover:border-primary/50'
               }`}
             >
               <div className="text-left">
-                <div className="font-semibold text-lg flex item-center gap-2">{t('addService.topTier')}
+                <div className="font-semibold text-lg flex items-center gap-2">
+                  {t('addService.topTier')}
                   {premiumTrialUsed ? (
-                    <Lock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{t('addService.paidBadge')}</span>
                   ) : (
-                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-2 rounded-full">{t('addService.trialBadge')}</span>
+                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{t('addService.trialBadge')}</span>
                   )}
                 </div>
                 <div className="text-2xl font-bold text-primary my-2">£4.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
@@ -386,57 +444,113 @@ export default function AddService() {
                   <div className="text-xs text-amber-600 mt-2">{t('addService.premiumTrialNote')}</div>
                 )}
                 {premiumTrialUsed && (
-                  <div className="text-xs text-destructive mt-2">{t('addService.premiumTrialUsed')}</div>
+                  <div className="text-xs text-primary mt-2">{t('addService.premiumPaymentRequired')}</div>
                 )}
               </div>
             </button>
           </div>
-         {formData.subscriptionTier === 'standard' && (
-            <p className="text-xs text-primary italic">{t('addService.standardFreeNote')}</p>
+          {formData.subscriptionTier === 'standard' && (
+            <p className="text-xs text-green-600 italic">{t('addService.standardFreeNote')}</p>
           )}
           {formData.subscriptionTier === 'top' && !premiumTrialUsed && (
             <p className="text-xs text-amber-600 italic">{t('addService.premiumTrialInfo')}</p>
+          )}
+          {formData.subscriptionTier === 'top' && premiumTrialUsed && (
+            <p className="text-xs text-primary italic">{t('addService.premiumPaymentInfo')}</p>
           )}
         </div>
 
         {/* Location Fields */}
         <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
-          <Label className="text-sm font-medium">
-            {t('addService.locationSection')}
+          <Label className="text-sm font-medium"> 
+            {t('addService.locationSection')} <span className="text-destructive">*</span>
           </Label>
+
+          <p className="text-sm text-muted-foreground">{t('addService.locationDescription')}</p>
+          
+          {/* Country (fixed) */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-muted-foreground">
+              {t('addService.country')}
+            </Label>
+            <div className="px-3 py-2 border border-border rounded-lg bg-muted/50 text-muted-foreground">
+              🇬🇧 United Kingdom
+            </div>
+          </div>
+          
+          {/* City */}
+          <div className="space-y-2">
+            <Label htmlFor="city" className="text-sm font-medium">
+              {t('addService.city')} <span className="text-destructive">*</span>
+            </Label>
+            <Select value={formData.city} onValueChange={(value) => handleSelectChange('city', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('addService.selectCity')} />
+              </SelectTrigger>
+              <SelectContent className="bg-background">
+                {UK_CITIES.map((city) => (
+                  <SelectItem key={city.value} value={city.value}>
+                    {city.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Borough (only for London) */}
+          {formData.city === 'london' && (
+            <div className="space-y-2">
+              <Label htmlFor="borough" className="text-sm font-medium">
+                {t('addService.borough')}
+                <span className="text-muted-foreground text-xs ml-1">({t('addService.recommended')})</span>
+              </Label>
+              <Select 
+                value={formData.borough || 'none'} 
+                onValueChange={(value) => handleSelectChange('borough', value === 'none' ? '' : value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t('addService.selectBorough')} />
+                </SelectTrigger>
+                <SelectContent className="bg-background max-h-[300px]">
+                  <SelectItem value="none">{t('addService.noBorough')}</SelectItem>
+                  {LONDON_BOROUGHS.map((borough) => (
+                    <SelectItem key={borough.value} value={borough.value}>
+                      {borough.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           
           {/* Postcode */}
           <div className="space-y-2">
             <Label htmlFor="postcode" className="text-sm font-medium">
-              {t('addService.postcode')}
+              {t('addService.postcode')} <span className="text-destructive">*</span>
             </Label>
             <Input
               id="postcode"
               name="postcode"
               value={formData.postcode}
-              onChange={handleInputChange}
+               onChange={(e) => {
+                const value = e.target.value.toUpperCase();
+                setFormData(prev => ({ ...prev, postcode: value }));
+                setPostcodeError(null);
+              }}
               placeholder={t('addService.postcodePlaceholder')}
+              className={postcodeError ? 'border-destructive' : ''}
             />
-          </div>
-
-          {/* City */}
-          <div className="space-y-2">
-            <Label htmlFor="city" className="text-sm font-medium">
-              {t('addService.city')}
-            </Label>
-            <Input
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleInputChange}
-              placeholder={t('addService.cityPlaceholder')}
-            />
+            {postcodeError && (
+              <p className="text-sm text-destructive">{postcodeError}</p>
+            )}
+            <p className="text-xs text-muted-foreground">{t('addService.postcodeHint')}</p>
           </div>
 
           {/* Address */}
           <div className="space-y-2">
             <Label htmlFor="address" className="text-sm font-medium">
               {t('addService.address')}
+              <span className="text-muted-foreground text-xs ml-1">({t('common.optional')})</span>
             </Label>
             <Input
               id="address"
@@ -445,6 +559,7 @@ export default function AddService() {
               onChange={handleInputChange}
               placeholder={t('addService.addressPlaceholder')}
             />
+            <p className="text-xs text-muted-foreground">{t('addService.addressHint')}</p>
           </div>
         </div>
 

@@ -1,6 +1,9 @@
 /**
  * Geocoding utility using OpenStreetMap Nominatim API (free, no API key required)
+ * Includes postcode caching to reduce external API calls
  */
+
+import { getCachedPostcode, cachePostcode, normalizePostcode } from './postcodeCache';
 
 export interface GeocodingResult {
   latitude: number;
@@ -27,7 +30,7 @@ export async function geocodeAddress(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1`,
       {
         headers: {
-          'User-Agent': 'EasyUK/1.0',
+          'User-Agent': 'Locsy/1.0',
         },
       }
     );
@@ -55,13 +58,24 @@ export async function geocodeAddress(
 }
 
 /**
- * Geocode a UK postcode
+ * Geocode a UK postcode with caching
+ * Uses cache if available and recent (30 days), otherwise fetches from API
  * @param postcode UK postcode
  */
 export async function geocodePostcode(postcode: string): Promise<GeocodingResult | null> {
   try {
     // Clean the postcode
-    const cleanPostcode = postcode.trim().toUpperCase();
+    const cleanPostcode = normalizePostcode(postcode);
+    
+    // Check cache first
+    const cached = getCachedPostcode(cleanPostcode);
+    if (cached) {
+      return {
+        latitude: cached.latitude,
+        longitude: cached.longitude,
+        displayName: cached.displayName,
+      };
+    }
     
     // Use postcodes.io API for UK postcodes (free, no API key required)
     const response = await fetch(
@@ -70,24 +84,38 @@ export async function geocodePostcode(postcode: string): Promise<GeocodingResult
 
     if (!response.ok) {
       // Fallback to Nominatim if postcode API fails
-      return geocodeAddress(cleanPostcode, undefined, 'United Kingdom');
+     const fallbackResult = await geocodeAddress(cleanPostcode, undefined, 'United Kingdom');
+      if (fallbackResult) {
+        // Cache with approximate precision since Nominatim is less accurate for postcodes
+        cachePostcode(cleanPostcode, fallbackResult.latitude, fallbackResult.longitude, fallbackResult.displayName, 'approximate');
+      }
+      return fallbackResult;
     }
 
     const data = await response.json();
     
     if (data.status === 200 && data.result) {
-      return {
+      const result: GeocodingResult = {
         latitude: data.result.latitude,
         longitude: data.result.longitude,
         displayName: `${data.result.postcode}, ${data.result.admin_district || ''}, UK`,
       };
+
+      // Cache the successful lookup with exact precision
+      cachePostcode(cleanPostcode, result.latitude, result.longitude, result.displayName, 'exact');
+      
+      return result;
     }
 
     return null;
   } catch (error) {
     console.error('Postcode geocoding error:', error);
     // Fallback to Nominatim
-    return geocodeAddress(postcode, undefined, 'United Kingdom');
+     const fallbackResult = await geocodeAddress(postcode, undefined, 'United Kingdom');
+    if (fallbackResult) {
+      cachePostcode(normalizePostcode(postcode), fallbackResult.latitude, fallbackResult.longitude, fallbackResult.displayName, 'approximate');
+    }
+    return fallbackResult;
   }
 }
 

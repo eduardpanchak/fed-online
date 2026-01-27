@@ -23,3 +23,9 @@ verify_jwt = true
 
 [functions.moderator-action]
 verify_jwt = true
+
+[functions.create-ad-checkout]
+verify_jwt = true
+
+[functions.revenuecat-webhook]
+verify_jwt = false

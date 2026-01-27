@@ -143,9 +143,3 @@ CREATE TRIGGER update_lists_updated_at
 BEFORE UPDATE ON public.lists
 FOR EACH ROW
 EXECUTE FUNCTION public.update_updated_at_column();
-
-(create (auth.uid() = user_id))
--- .select();
-
-(auth.uid() = user_id OR true)
--- .select();

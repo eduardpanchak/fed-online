@@ -117,6 +117,7 @@ export function LanguageMultiSelect({
 
       {isOpen && (
         <div className="absolute z-50 w-full mt-1 bg-background border border-border rounded-lg shadow-lg overflow-hidden">
+           <div className="max-h-52 overflow-y-auto">
           {AVAILABLE_LANGUAGES.map(lang => (
             <div
               key={lang.code}
@@ -133,6 +134,7 @@ export function LanguageMultiSelect({
               )}
             </div>
           ))}
+          </div>
         </div>
       )}
     </div>

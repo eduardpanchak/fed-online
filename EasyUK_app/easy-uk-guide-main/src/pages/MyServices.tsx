@@ -342,14 +342,14 @@ export default function MyServices(){
                   )}
                   <Button
                     onClick={() => handleSubscribe(service.id, service.subscription_tier)}
-                    className="w-full"
+                    className="w-full border-primary"
                     size="sm"
                   >
                     <CreditCard className="h-4 w-4 mr-2" />
                     {t('myServices.subscribeNow')} - {getPriceForTier(service.subscription_tier)}/month
                   </Button>
                   <Button
-                    className="w-full"
+                    className="w-full mt-2"
                     size="sm"
                     variant="destructive"
                     onClick={() => {
@@ -367,7 +367,15 @@ export default function MyServices(){
               !isSuspended && service.status === 'trial' && (
                 <div className="pt-3 border-t">
                   <Button
-                    className="w-full"
+                    onClick={() => handleSubscribe(service.id, service.subscription_tier)}
+                    className="w-full border-primary"
+                    size="sm"
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    {t('myServices.subscribeNow')} - {getPriceForTier(service.subscription_tier)}/month
+                  </Button>
+                  <Button
+                    className="w-full mt-2"
                     size="sm"
                     variant="destructive"
                     onClick={() => {
@@ -387,13 +395,14 @@ export default function MyServices(){
                   <Button
                     onClick={() => handleSubscribe(service.id, service.subscription_tier)}
                     variant="outline"
-                    className="w-full"
+                    className="w-full border-primary"
                     size="sm"
                   >
-
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    {t('myServices.subscribeNow')} - {getPriceForTier(service.subscription_tier)}/month
                   </Button>
                   <Button
-                    className="w-full"
+                    className="w-full mt-2"
                     size="sm"
                     variant="destructive"
                     onClick={() => {
