@@ -8,7 +8,8 @@ import { educationData } from '@/data/educationData';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const FREE_ITEMS_COUNT = 3;
+
+const FREE_ITEMS_COUNT = 10;
 
 export default function Education() {
   const navigate = useNavigate();

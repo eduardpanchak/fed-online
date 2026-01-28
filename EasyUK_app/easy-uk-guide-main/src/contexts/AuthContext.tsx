@@ -5,6 +5,8 @@ import { authService } from '@/services/authService';
 import { dbService } from '@/services/dbService';
 import { storageService } from '@/services/storageService';
 import { subscriptionService } from '@/services/subscriptionService';
+import { revenuecatService } from '@/services/revenuecatService';
+import { entitlementsService, Entitlements } from '@/services/entitlementsService';
 
 interface Profile {
   id: string;
@@ -19,7 +21,7 @@ interface Profile {
 }
 
 interface Subscription {
-  status: 'free' | 'pro';
+  status: 'free';
   subscription_end: string | null;
   subscribed: boolean;
 }
@@ -29,6 +31,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   subscription: Subscription | null;
+  entitlements: Entitlements | null;
   loading: boolean;
   signUp: (email: string, password: string, name: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -40,6 +43,7 @@ interface AuthContextType {
   uploadAvatar: (file: File) => Promise<{ url: string | null; error: any }>;
   refreshProfile: () => Promise<void>;
   checkSubscription: () => Promise<void>;
+  refreshEntitlements: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -49,7 +53,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [entitlements, setEntitlements] = useState<Entitlements | null>(null);
   const [loading, setLoading] = useState(true);
+
+   // Initialize RevenueCat on mount
+  useEffect(() => {
+    revenuecatService.initialize();
+  }, []);
 
   const fetchProfile = async (userId: string) => {
     try {
@@ -83,6 +93,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const refreshEntitlements = async () => {
+    try {
+      const ent = await entitlementsService.getEntitlements();
+      setEntitlements(ent);
+    } catch (error) {
+      console.error('Error fetching entitlements:', error);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener
     const subscription = authService.onAuthStateChange(
@@ -91,14 +110,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          // Log in to RevenueCat
+          revenuecatService.logIn(session.user.id);
           // Defer profile and subscription fetching to avoid blocking auth state update
           setTimeout(() => {
             fetchProfile(session.user.id);
             checkSubscription();
+            refreshEntitlements();
           }, 0);
         } else {
+          // Log out from RevenueCat
+          revenuecatService.logOut();
           setProfile(null);
           setSubscription(null);
+          setEntitlements(null);
         }
         
         setLoading(false);
@@ -111,8 +136,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        // Log in to RevenueCat
+        revenuecatService.logIn(session.user.id);
+
         fetchProfile(session.user.id);
         checkSubscription();
+         refreshEntitlements();
       }
       setLoading(false);
     });
@@ -151,9 +180,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
+    // Log out from RevenueCat
+    await revenuecatService.logOut();
+
     await authService.signOut();
     setProfile(null);
     setSubscription(null);
+    setEntitlements(null);
     toast.success('Signed out successfully');
   };
 
@@ -206,6 +239,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         profile,
         subscription,
         loading,
+        entitlements,
+        refreshEntitlements,
         signUp,
         signIn,
         signInWithGoogle,

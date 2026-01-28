@@ -1,0 +1,4 @@
+id;user_id;title;progress;is_archived;is_template;template_key;created_at;updated_at
+e73823ed-917a-40a8-be64-5a85015383ef;aa7d3257-9651-4b4a-9cac-dc176b65c517;Перші дні у Великобританії;100;false;false;first_days;2025-12-03 12:51:34.803942+00;2025-12-03 12:51:46.095076+00
+7f9b541b-9a16-4436-8843-d730f418a884;bfc2b650-6bb3-4e7e-b472-14472c1d0a8f;ghgh;0;false;false;;2025-12-05 23:11:02.821495+00;2025-12-05 23:11:21.178611+00
+8ed9926b-8dce-47bf-96c1-7271acfcd784;952f4976-92a9-46d9-ae30-725e3bcd0dc0;Перші дні у Великобританії;0;true;false;first_days;2025-12-15 06:16:03.58401+00;2025-12-15 06:16:34.633153+00

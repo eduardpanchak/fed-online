@@ -82,9 +82,9 @@ export default function Statistics() {
         </div>
       </header>
 
-      <div className="p-4 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         {/* Overall Stats */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-rows-2 gap-4">
           <Card className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-primary/10 rounded-lg">

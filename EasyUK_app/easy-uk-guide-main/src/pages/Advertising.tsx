@@ -20,7 +20,7 @@ export default function Advertising() {
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('ads.title')} showBack />
 
-      <div className="container mx-auto p-4 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <div className="flex items-center gap-3 p-4 bg-primary/10 rounded-lg">
           <Megaphone className="h-8 w-8 text-primary" />
           <div>

@@ -45,7 +45,7 @@ export default function FAQ() {
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('account.faq')} showBack />
 
-      <div className="container max-w-2xl mx-auto p-4 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
           <p className="text-muted-foreground">

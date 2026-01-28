@@ -11,7 +11,8 @@ export const Header = ({ title, showSearch = false, showBack = false }: HeaderPr
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-10 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
+    <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border px-4 py-3 flex items-center justify-between">
+
       <div className="flex items-center gap-3">
         {showBack && (
           <button

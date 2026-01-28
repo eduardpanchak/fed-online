@@ -284,7 +284,7 @@ export default function AddAdvertisement() {
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('ads.addAdvertisement')} showBack />
 
-      <div className="container mx-auto p-4 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Media Upload */}
           <div className="space-y-2">

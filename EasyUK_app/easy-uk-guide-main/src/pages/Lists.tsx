@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import { Archive, Plus, Loader2 } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
@@ -15,6 +15,52 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { listsService, List, ListItem } from '@/services/listsService';
 import { listTemplates, ListTemplate } from '@/data/listTemplatesData';
+import { supabase } from '@/integrations/supabase/client';
+
+export async function createList(
+  userId: string,
+  title: string,
+  templateKey?: string
+) {
+  const { data, error } = await supabase
+    .from("lists")
+    .insert({
+      user_id: userId,
+      title,
+      is_template: false,
+      template_key: templateKey ?? null,
+      is_archived: false
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("createList error:", error);
+    throw error;
+  }
+
+  return data; // ← ОБЯЗАТЕЛЬНО
+}
+
+export async function addListItem(
+  listId: string,
+  text: string,
+  position: number
+) {
+  const { error } = await supabase
+    .from("list_items")
+    .insert({
+      list_id: listId,
+      text,
+      position
+    });
+
+  if (error) {
+    console.error("addListItem error:", error);
+    throw error;
+  }
+}
+
 
 export default function Lists() {
   const { t } = useLanguage();
@@ -80,36 +126,63 @@ export default function Lists() {
     );
   }
 
-  const handleCreateList = async (title: string) => {
-    if (!user) return;
+
+ const handleCreateList = async (title: string) => {
+  if (!user) return;
+
+  try {
+    await listsService.createList(user.id, title);
+    toast({ title: t("lists.listCreated") });
+
     try {
-      await listsService.createList(user.id, title);
-      toast({ title: t('lists.listCreated') });
-      fetchLists();
-    } catch (error) {
-      console.error('Error creating list:', error);
-      toast({ title: t('lists.errorCreating'), variant: 'destructive' });
+      await fetchLists();
+    } catch (e) {
+      console.error("fetchLists failed after create:", e);
     }
-  };
+  } catch (error) {
+    console.error("Error creating list:", error);
+    toast({ title: t("lists.errorCreating"), variant: "destructive" });
+  }
+};
 
-  const handleAddTemplate = async (template: ListTemplate) => {
-    if (!user) return;
+
+
+ const handleAddTemplate = async (template: ListTemplate) => {
+  if (!user) return;
+
+  try {
+    const title = t(template.titleKey);
+    const list = await listsService.createList(user.id, title, template.key);
+
+    if (!list || !list.id) {
+      throw new Error("List created but no id returned from server");
+    }
     try {
-      const title = t(template.titleKey);
-      const list = await listsService.createList(user.id, title, template.key);
-
-      // Add template items
-      for (let i = 0; i < template.items.length; i++) {
-        await listsService.addListItem(list.id, t(template.items[i].textKey), i);
-      }
-
-      toast({ title: t('lists.listCreated') });
-      fetchLists();
-    } catch (error) {
-      console.error('Error adding template:', error);
-      toast({ title: t('lists.errorCreating'), variant: 'destructive' });
+      const itemPromises = template.items.map((item, index) => 
+        listsService.addListItem(list.id, t(item.textKey), index)
+      );
+      await Promise.all(itemPromises);
+    } catch (itemError) {
+      console.error("Failed to add some template items:", itemError);
     }
-  };
+
+    toast({ title: t("lists.listCreated") });
+    
+    await fetchLists();
+
+  } catch (error) {
+    console.error("Error adding template:", error);
+    toast({ 
+      title: t("lists.errorCreating"), 
+      description: error instanceof Error ? error.message : undefined,
+      variant: "destructive" 
+    });
+  }
+};
+
+
+
+
 
   const handleEditList = async (listId: string, title: string) => {
     try {

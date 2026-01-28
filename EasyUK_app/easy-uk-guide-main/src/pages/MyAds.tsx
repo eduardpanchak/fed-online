@@ -7,7 +7,7 @@ import { BottomNav } from '@/components/BottomNav';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { advertisingService, Advertisement } from '@/services/advertisingService';
-import { supabase } from '@/integrations/supabase/client';
+import { entitlementsService } from '@/services/entitlementsService';
 import { 
   Loader2, 
   Plus, 
@@ -16,7 +16,8 @@ import {
   Calendar, 
   Trash2, 
   CreditCard,
-  ExternalLink
+  ExternalLink,
+  Smartphone
 } from 'lucide-react';
 import {
   AlertDialog,
@@ -32,9 +33,10 @@ import {
 export default function MyAds() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user } = useAuth();
+  const { user, refreshEntitlements } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const isNative = entitlementsService.isNativeApp();
 
   const [ads, setAds] = useState<Advertisement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -135,18 +137,40 @@ export default function MyAds() {
   };
 
   const handlePayment = async (ad: Advertisement) => {
+     // Check if we're on native platform
+    if (!entitlementsService.isNativeApp()) {
+      toast({
+        title: t('subscriptions.mobileOnly'),
+        description: t('subscriptions.mobileOnlyDesc'),
+      });
+      return;
+    }
+
     setProcessingPayment(ad.id);
     try {
-      const { data, error } = await supabase.functions.invoke('create-ad-checkout', {
-        body: { adId: ad.id },
-      });
-
-      if (error) throw error;
-      if (data?.url) {
-        window.open(data.url, '_blank');
+      const result = await entitlementsService.purchaseEntitlement('ads');
+      
+      if (result.success) {
+        // Refresh entitlements in context
+        await refreshEntitlements?.();
+        
+        // Activate the ad server-side
+        await advertisingService.markAdAsPaid(ad.id);
+        
+        toast({
+          title: t('ads.paymentSuccess'),
+        });
+        fetchAds();
+      } else if (result.error === 'CANCELLED') {
+        // User cancelled, do nothing
+      } else {
+        toast({
+          title: t('ads.errorPayment'),
+          variant: 'destructive',
+        });
       }
     } catch (error) {
-      console.error('Error creating payment:', error);
+      console.error('Error processing payment:', error);
       toast({
         title: t('ads.errorPayment'),
         variant: 'destructive',
@@ -222,7 +246,7 @@ export default function MyAds() {
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('ads.myAds')} showBack />
 
-      <div className="container mx-auto p-4 space-y-4">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <Button
           onClick={() => navigate('/advertising/add')}
           className="w-full"
@@ -317,9 +341,9 @@ export default function MyAds() {
                     {/* Actions */}
                     <div className="flex gap-2">
                       {/* Show payment button for trial ads, payment_required ads, expired ads, or paid ads that want to extend */}
-                      {(ad.status === 'payment_required' || isExpired || ad.is_paid || (ad.is_trial && !ad.is_paid)) && (
+                       {(ad.status === 'payment_required' || isExpired || (ad.is_trial && !ad.is_paid)) && (
                         <Button
-                          variant={ad.is_paid && !isExpired ? "outline" : "default"}
+                         variant="default"
                           size="sm"
                           className="flex-1"
                           onClick={() => handlePayment(ad)}
@@ -327,15 +351,17 @@ export default function MyAds() {
                         >
                           {processingPayment === ad.id ? (
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          ) : (
+                          ) : isNative ? (
                             <CreditCard className="h-4 w-4 mr-2" />
+                          ) : (
+                            <Smartphone className="h-4 w-4 mr-2" />
                           )}
-                          {ad.status === 'payment_required' 
-                            ? t('ads.payToActivate')
-                            : ad.is_paid 
-                              ? t('ads.extendAd') 
-                              : t('ads.payForAd')
-                          } £7.99
+                          {isNative 
+                            ? (ad.status === 'payment_required' 
+                                ? t('ads.payToActivate')
+                                : t('ads.subscribe'))
+                            : t('subscriptions.openInApp')
+                          }
                         </Button>
                       )}
                       <Button

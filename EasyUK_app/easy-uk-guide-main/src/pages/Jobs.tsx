@@ -8,7 +8,7 @@ import { jobsData } from '@/data/jobsData';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const FREE_ITEMS_COUNT = 3;
+const FREE_ITEMS_COUNT = 10;
 
 export default function Jobs() {
   const navigate = useNavigate();

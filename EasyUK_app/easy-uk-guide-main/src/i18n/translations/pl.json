@@ -289,7 +289,9 @@
     "deleteError": "Nie udało się usunąć usługi",
     "underModeration": "W moderacji",
     "moderationMessage": "Ta usługa została zawieszona z powodu wielu zgłoszeń. Edycja, usuwanie i ponowna publikacja są wyłączone.",
-    "actionDisabledModeration": "Akcja wyłączona podczas moderacji usługi"
+    "actionDisabledModeration": "Akcja wyłączona podczas moderacji usługi",
+    "subscriptionSuccess": "Subskrypcja została pomyślnie aktywowana!",
+    "subscriptionFailed": "Subskrypcja nie powiodła się. Spróbuj ponownie."
   },
   "editService": {
     "title": "Edytuj usługę",
@@ -1186,5 +1188,15 @@
     "alreadyReportedMessage": "Już zgłosiłeś/aś tę usługę. Twoje zgłoszenie jest w trakcie weryfikacji.",
     "signInRequired": "Zaloguj się, aby zgłosić usługę"
   }
- }
+ },
+ "subscriptions": {
+    "mobileOnly": "Subskrypcje dostępne tylko w aplikacji mobilnej",
+    "mobileOnlyDesc": "Pobierz naszą aplikację mobilną, aby wykupić subskrypcje i odblokować wszystkie funkcje.",
+    "openInApp": "Otwórz w aplikacji",
+    "purchaseSuccess": "Zakup zakończony sukcesem!",
+    "purchaseFailed": "Zakup nie powiódł się. Spróbuj ponownie.",
+    "restorePurchases": "Przywróć zakupy",
+    "restoreSuccess": "Zakupy zostały pomyślnie przywrócone!",
+    "restoreFailed": "Nie udało się przywrócić zakupów."
+  }
 }

@@ -289,7 +289,9 @@
     "deleteError": "Nepavyko ištrinti paslaugos",
     "underModeration": "Moderuojama",
     "moderationMessage": "Ši paslauga sustabdyta dėl daugybės skundų. Redagavimas, trynimas ir pakartotinis publikavimas išjungti.",
-    "actionDisabledModeration": "Veiksmas išjungtas, kol paslauga moderuojama"
+    "actionDisabledModeration": "Veiksmas išjungtas, kol paslauga moderuojama",
+    "subscriptionSuccess": "Prenumerata sėkmingai suaktyvinta!",
+    "subscriptionFailed": "Prenumerata nepavyko. Bandykite dar kartą."
   },
   "editService": {
     "title": "Redaguoti paslaugą",
@@ -1183,6 +1185,16 @@
     "alreadyReported": "Jūs jau pranešėte apie šią paslaugą",
     "alreadyReportedMessage": "Jūs jau pranešėte apie šią paslaugą. Jūsų pranešimas peržiūrimas.",
     "signInRequired": "Norėdami pranešti apie paslaugą, prisijunkite"
+  },
+  "subscriptions": {
+    "mobileOnly": "Prenumeratos pasiekiamos tik mobiliojoje programėlėje",
+    "mobileOnlyDesc": "Atsisiųskite mūsų mobiliąją programėlę, kad galėtumėte įsigyti prenumeratas ir atrakinti visas funkcijas.",
+    "openInApp": "Atidaryti programėlėje",
+    "purchaseSuccess": "Pirkimas sėkmingas!",
+    "purchaseFailed": "Pirkimas nepavyko. Bandykite dar kartą.",
+    "restorePurchases": "Atkurti pirkinius",
+    "restoreSuccess": "Pirkimai sėkmingai atkurti!",
+    "restoreFailed": "Nepavyko atkurti pirkimų."
   }
 }
 

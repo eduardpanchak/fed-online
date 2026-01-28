@@ -8,7 +8,7 @@ export default function About() {
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('account.aboutEasyUK')} showBack />
 
-      <div className="container max-w-2xl mx-auto p-4 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <div className="prose prose-sm max-w-none">
           <h2 className="text-2xl font-bold text-foreground">Welcome to Locsy</h2>
           

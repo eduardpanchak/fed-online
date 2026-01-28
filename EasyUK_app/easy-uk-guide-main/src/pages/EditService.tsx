@@ -326,7 +326,7 @@ export default function EditService() {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="p-4 space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto px-4 py-6 space-y-4">
         {/* Service Name */}
         <div className="space-y-2">
           <Label htmlFor="serviceName" className="text-sm font-medium">
@@ -407,7 +407,7 @@ export default function EditService() {
         <div className="space-y-3">
           <Label className="text-sm font-medium">{t('editService.currentPlan')}</Label>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-rows-2 gap-3">
             {/* Standard */}
             <button
               type="button"
@@ -431,7 +431,7 @@ export default function EditService() {
                     </span>
                   )}
                 </div>
-                <div className="text-2xl font-bold text-green-600 my-2">
+                <div className="text-sm font-bold text-primary my-2">
                   {t('addService.freeForever')}
                 </div>
                 <div className="text-sm text-muted-foreground">{t('addService.standardFeatures')}</div>
@@ -458,9 +458,9 @@ export default function EditService() {
                     </span>
                   )}
                 </div>
-                <div className="text-2xl font-bold text-primary my-2">
+                <div className="text-lg font-bold text-primary my-2">
                   £4.99
-                  <span className="text-sm font-normal text-muted-foreground">/month</span>
+                  <span className="text-xs font-normal text-muted-foreground">/month</span>
                 </div>
                 <div className="text-sm text-muted-foreground">{t('addService.topFeatures')}</div>
                 {currentTier === 'standard' && selectedTier === 'top' && (

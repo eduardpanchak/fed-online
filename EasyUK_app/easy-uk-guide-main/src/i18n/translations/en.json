@@ -289,7 +289,9 @@
     "deleteError": "Failed to delete service",
     "underModeration": "Under Moderation",
     "moderationMessage": "This service has been suspended due to multiple reports. Editing, deletion, and re-publishing are disabled.",
-    "actionDisabledModeration": "Action disabled while service is under moderation"
+    "actionDisabledModeration": "Action disabled while service is under moderation",
+    "subscriptionSuccess": "Subscription activated successfully!",
+    "subscriptionFailed": "Subscription failed. Please try again."
   },
   "editService": {
     "title": "Edit Service",
@@ -1187,5 +1189,15 @@
     "alreadyReported": "You have already reported this service",
     "alreadyReportedMessage": "You already reported this service. Your report is under review.",
     "signInRequired": "Please sign in to report a service"
+  },
+  "subscriptions": {
+    "mobileOnly": "Subscriptions available in the mobile app",
+    "mobileOnlyDesc": "Download our mobile app to purchase subscriptions and unlock all features.",
+    "openInApp": "Open in App",
+    "purchaseSuccess": "Purchase successful!",
+    "purchaseFailed": "Purchase failed. Please try again.",
+    "restorePurchases": "Restore Purchases",
+    "restoreSuccess": "Purchases restored successfully!",
+    "restoreFailed": "Failed to restore purchases."
   }
 }

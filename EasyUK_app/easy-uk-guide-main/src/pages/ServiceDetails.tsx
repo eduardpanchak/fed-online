@@ -482,7 +482,7 @@ export default function ServiceDetails() {
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         {/* Main Photo */}
         <div className="w-full aspect-video bg-muted relative overflow-hidden">
           {service.photos && service.photos.length > 0 ? (
@@ -512,8 +512,8 @@ export default function ServiceDetails() {
 
             {/* Languages */}
             {service.languages && service.languages.length > 0 && (
-              <div className="flex mt-3">
-                <label className="text-sm font-medium text-muted-foreground flex items-start gap-1.5 mb-2">
+              <div className="mt-3 bg-muted/50 p-3 rounded-md">
+                <label className="text-sm font-medium text-muted-foreground flex items-center gap-1.5 mb-2">
                   <Globe className="h-4 w-4" />
                   {t('services.languageFilter')}
                 </label>

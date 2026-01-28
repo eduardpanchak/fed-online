@@ -13,6 +13,10 @@ export { authService } from './authService';
 export { dbService } from './dbService';
 export { storageService } from './storageService';
 export { subscriptionService } from './subscriptionService';
+export { revenuecatService, ENTITLEMENT_IDS } from './revenuecatService';
+export { entitlementsService } from './entitlementsService';
 
 // Re-export types for convenience
 export type { SignUpParams, SignInParams } from './authService';
+export type { EntitlementStatus } from './revenuecatService';
+export type { Entitlements } from './entitlementsService';

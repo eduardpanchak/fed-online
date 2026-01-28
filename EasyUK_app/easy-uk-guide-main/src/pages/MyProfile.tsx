@@ -93,7 +93,7 @@ export default function MyProfile() {
     <div className="min-h-screen bg-background pb-20">
       <Header title="My Profile" showBack />
 
-      <div className="container max-w-2xl mx-auto p-4 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative">
             <Avatar className="h-24 w-24">

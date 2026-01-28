@@ -316,7 +316,7 @@ export default function AddService() {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="p-4 space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto px-4 py-6 space-y-4">
         {/* Service Name */}
         <div className="space-y-2">
           <Label htmlFor="serviceName" className="text-sm font-medium">
@@ -398,7 +398,7 @@ export default function AddService() {
             {t('addService.subscriptionTier')} <span className="text-destructive">*</span>
           </Label>
           <p className="text-sm text-muted-foreground">{t('addService.tierDescriptionNew')}</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-rows-2 md:grid-rows-2 gap-3">
             {/* Standard Tier - Always Free */}
             <button
               type="button"
@@ -414,7 +414,7 @@ export default function AddService() {
                   {t('addService.standardTier')}
                   <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">{t('addService.free')}</span>
                 </div>
-                <div className="text-2xl font-bold text-green-600 my-2">{t('addService.freeForever')}</div>
+                <div className="text-md font-bold text-primary my-2">{t('addService.freeForever')}</div>
                 <div className="text-sm text-muted-foreground">{t('addService.standardFeatures')}</div>
               </div>
             </button>
@@ -438,7 +438,7 @@ export default function AddService() {
                     <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{t('addService.trialBadge')}</span>
                   )}
                 </div>
-                <div className="text-2xl font-bold text-primary my-2">£4.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-lg font-bold text-primary my-2">£4.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
                 <div className="text-sm text-muted-foreground">{t('addService.topFeatures')}</div>
                 {!premiumTrialUsed && (
                   <div className="text-xs text-amber-600 mt-2">{t('addService.premiumTrialNote')}</div>

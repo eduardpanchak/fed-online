@@ -593,6 +593,49 @@ export type Database = {
         Relationships: []
       }
 
+      user_entitlements: {
+        Row: {
+          ads_active: boolean
+          ads_expires_at: string | null
+          created_at: string
+          id: string
+          // premium_active: boolean
+          // premium_expires_at: string | null
+          revenuecat_customer_id: string | null
+          top_service_active: boolean
+          top_service_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ads_active?: boolean
+          ads_expires_at?: string | null
+          created_at?: string
+          id?: string
+          // premium_active?: boolean
+          // premium_expires_at?: string | null
+          revenuecat_customer_id?: string | null
+          top_service_active?: boolean
+          top_service_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ads_active?: boolean
+          ads_expires_at?: string | null
+          created_at?: string
+          id?: string
+          // premium_active?: boolean
+          // premium_expires_at?: string | null
+          revenuecat_customer_id?: string | null
+          top_service_active?: boolean
+          top_service_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+
       user_roles: {
         Row: {
           created_at: string
@@ -758,6 +801,18 @@ export type Database = {
           subscription_tier: string
         }[]
       }
+
+      get_user_entitlements: { Args: { p_user_id?: string }; Returns: Json }
+      has_ads_entitlement: { Args: { p_user_id?: string }; Returns: boolean }
+      // has_premium_entitlement: {
+      //   Args: { p_user_id?: string }
+      //   Returns: boolean
+      // }
+      has_top_service_entitlement: {
+        Args: { p_user_id?: string }
+        Returns: boolean
+      }
+
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -788,6 +843,20 @@ export type Database = {
           p_target_url: string
         }
         Returns: Json
+      }
+        publish_top_service: { Args: { p_service_id: string }; Returns: Json }
+      sync_user_entitlements: {
+        Args: {
+          p_ads_active?: boolean
+          p_ads_expires_at?: string
+          p_premium_active?: boolean
+          p_premium_expires_at?: string
+          p_revenuecat_customer_id?: string
+          p_top_service_active?: boolean
+          p_top_service_expires_at?: string
+          p_user_id: string
+        }
+        Returns: boolean
       }
       update_user_entitlement: {
         Args: {

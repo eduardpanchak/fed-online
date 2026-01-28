@@ -4,9 +4,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
-import { User, Briefcase, Info, MessageSquare, HelpCircle, LogOut, Crown, Loader2, Languages, BarChart, Megaphone } from 'lucide-react';
+import { User, Briefcase, Info, MessageSquare, HelpCircle, LogOut, Crown, Loader2, Languages, BarChart, Megaphone, Smartphone, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { entitlementsService } from '@/services/entitlementsService';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import React, { useState, useEffect } from 'react';
@@ -19,14 +20,15 @@ import {
 
 export default function Account() {
   const navigate = useNavigate();
-  const { profile, user, subscription, checkSubscription, signOut } = useAuth();
+  const { profile, user, entitlements, refreshEntitlements, signOut } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const [loading, setLoading] = useState(false);
-  const [portalLoading, setPortalLoading] = useState(false);
+  const [restoreLoading, setRestoreLoading] = useState(false);
   const [languageDialogOpen, setLanguageDialogOpen] = useState(false);
   const [confirmBusinessDialogOpen, setConfirmBusinessDialogOpen] = useState(false);
   const [successBusinessDialogOpen, setSuccessBusinessDialogOpen] = useState(false);
   const [isBusinessUser, setIsBusinessUser] = useState(profile?.is_business_user || false);
+  const isNative = entitlementsService.isNativeApp();
   
   
   useEffect(() => {
@@ -38,16 +40,11 @@ export default function Account() {
     // Check for success/cancel params
     const params = new URLSearchParams(window.location.search);
     if (params.get('success') === 'true') {
-      toast.success('Subscription activated successfully!');
-      checkSubscription();
-      // Clean up URL
-      window.history.replaceState({}, '', '/account');
-    } else if (params.get('canceled') === 'true') {
-      toast.info('Checkout canceled');
-      // Clean up URL
+      toast.success(t('subscriptions.purchaseSuccess'));
+      refreshEntitlements?.();
       window.history.replaceState({}, '', '/account');
     }
-  }, [checkSubscription]);
+  }, [refreshEntitlements]);
 
   const getInitials = () => {
     if (profile?.name) {
@@ -67,38 +64,52 @@ export default function Account() {
   };
 
   const handleUpgrade = async () => {
+     if (!isNative) {
+      toast.info(t('subscriptions.mobileOnly'));
+      return;
+    }
+
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout');
+      const result = await entitlementsService.purchaseEntitlement('premium');
       
-      if (error) throw error;
-      
-      if (data?.url) {
-        window.open(data.url, '_blank');
+      if (result.success) {
+        await refreshEntitlements?.();
+        toast.success(t('subscriptions.purchaseSuccess'));
+      } else if (result.error === 'CANCELLED') {
+        // User cancelled
+      } else {
+        toast.error(t('subscriptions.purchaseFailed'));
       }
     } catch (error) {
-      console.error('Error creating checkout:', error);
-      toast.error('Failed to start checkout. Please try again.');
+      console.error('Error purchasing:', error);
+      toast.error(t('subscriptions.purchaseFailed'));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleManageSubscription = async () => {
-    setPortalLoading(true);
+  const handleRestorePurchases = async () => {
+    if (!isNative) {
+      toast.info(t('subscriptions.mobileOnly'));
+      return;
+    }
+
+    setRestoreLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('customer-portal');
+      const result = await entitlementsService.restorePurchases();
       
-      if (error) throw error;
-      
-      if (data?.url) {
-        window.open(data.url, '_blank');
+      if (result.success) {
+        await refreshEntitlements?.();
+        toast.success(t('subscriptions.restoreSuccess'));
+      } else {
+        toast.error(t('subscriptions.restoreFailed'));
       }
     } catch (error) {
-      console.error('Error opening customer portal:', error);
-      toast.error('Failed to open subscription management. Please try again.');
+      console.error('Error restoring:', error);
+      toast.error(t('subscriptions.restoreFailed'));
     } finally {
-      setPortalLoading(false);
+      setRestoreLoading(false);
     }
   };
 
@@ -120,8 +131,8 @@ export default function Account() {
       // Update local state immediately
       setIsBusinessUser(true);
       
-      // Refresh profile data
-      await checkSubscription();
+      // Refresh entitlements
+      await refreshEntitlements?.();
       
       // Close confirmation and show success
       setConfirmBusinessDialogOpen(false);
@@ -147,8 +158,9 @@ export default function Account() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('account.title')} />
+      
 
-      <div className="container mx-auto p-4 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <div className="flex items-center space-x-4 p-4 bg-card rounded-lg">
           <Avatar className="h-16 w-16">
             <AvatarImage src={profile?.avatar_url || undefined} />
@@ -158,52 +170,6 @@ export default function Account() {
           <div className="flex-1">
             <h2 className="text-lg font-semibold">{profile?.name || 'User'}</h2>
             <p className="text-sm text-muted-foreground">{profile?.email}</p>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.subscription')}</h3>
-          
-          <div className="bg-card rounded-lg p-4">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <Crown className={`w-5 h-5 ${subscription?.subscribed ? 'text-primary' : 'text-muted-foreground'}`} />
-                <div>
-                  <span className="font-medium block">{t('account.subscriptionStatus')}</span>
-                  <span className={`text-sm ${subscription?.subscribed ? 'text-primary' : 'text-muted-foreground'}`}>
-                    {subscription?.subscribed ? t('account.pro') : t('account.free')}
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            {subscription?.subscribed ? (
-              <div className="space-y-3">
-                {subscription.subscription_end && (
-                  <p className="text-sm text-muted-foreground">
-                    {t('account.renewsOn')} {new Date(subscription.subscription_end).toLocaleDateString()}
-                  </p>
-                )}
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={handleManageSubscription}
-                  disabled={portalLoading}
-                >
-                  {portalLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  {t('account.manageSubscription')}
-                </Button>
-              </div>
-            ) : (
-              <Button 
-                className="w-full" 
-                onClick={handleUpgrade}
-                disabled={loading}
-              >
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {t('account.upgradeToPro')}
-              </Button>
-            )}
           </div>
         </div>
 
