@@ -2,6 +2,23 @@
   "app": {
     "title": "Locsy"
   },
+  "auth": {
+    "passwordsMustMatch": "Пароли должны совпадать",
+    "forgotPassword": "Забыли пароль?",
+    "confirmPassword": "Подтвердите пароль",
+    "emailRequired": "Введите email"
+  },
+  "resetPassword": {
+    "title": "Сброс пароля",
+    "instruction": "Введите новый пароль для вашего аккаунта.",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "submit": "Сбросить пароль",
+    "resetting": "Сброс...",
+    "successMessage": "Ваш пароль успешно сброшен!",
+    "errorMessage": "Не удалось сбросить пароль. Пожалуйста, попробуйте еще раз.",
+    "invalidLink": "Ссылка для сброса пароля недействительна или истекла."
+  },
   "nav": {
     "home": "Главная",
     "lists": "Списки",

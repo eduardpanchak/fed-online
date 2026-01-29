@@ -1,7 +1,10 @@
 {
   "name": "locsy-app",
+  "slug": "locsy-app",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -16,7 +16,7 @@ interface Profile {
   phone: string | null;
   location: string | null;
   is_business_user?: boolean;
-  premium_trial_used?: boolean;
+  // premium_trial_used?: boolean;
   standart_trial_used?: boolean;
 }
 
@@ -103,32 +103,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    // Set up auth state listener
-    const subscription = authService.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Log in to RevenueCat
-          revenuecatService.logIn(session.user.id);
-          // Defer profile and subscription fetching to avoid blocking auth state update
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-            checkSubscription();
-            refreshEntitlements();
-          }, 0);
-        } else {
-          // Log out from RevenueCat
-          revenuecatService.logOut();
-          setProfile(null);
-          setSubscription(null);
-          setEntitlements(null);
+  const subscription = authService.onAuthStateChange(
+    async (event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        // --- НОВЫЙ БЛОК ---
+        // Проверяем, не является ли этот вход восстановлением пароля
+        const isRecovery = window.location.hash.includes('type=recovery') || 
+                           window.location.href.includes('reset-password');
+
+        if (isRecovery) {
+          console.log("Recovery mode detected, skipping standard redirects");
+          setLoading(false);
+          return; // Прекращаем выполнение, чтобы не запускать логику обычного входа
         }
-        
-        setLoading(false);
+        // ------------------
+
+        revenuecatService.logIn(session.user.id);
+        setTimeout(() => {
+          fetchProfile(session.user.id);
+          checkSubscription();
+          refreshEntitlements();
+        }, 0);
+      } else {
+        revenuecatService.logOut();
+        setProfile(null);
+        setSubscription(null);
+        setEntitlements(null);
       }
-    );
+      
+      setLoading(false);
+    }
+  );
+  // ... rest of code
 
     // Check for existing session
     authService.getSession().then(({ session }) => {

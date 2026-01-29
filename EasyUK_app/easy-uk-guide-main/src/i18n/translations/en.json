@@ -2,6 +2,23 @@
   "app": {
     "title": "Locsy"
   },
+  "auth": {
+    "passwordsMustMatch": "Passwords must match",
+    "forgotPassword": "Forgot Password?",
+    "confirmPassword": "Confirm Password",
+    "emailRequired": "Email is required"
+  },
+  "resetPassword": {
+    "title": "Reset Your Password",
+    "instruction": "Please enter your new password below to reset it.",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "submit": "Reset Password",
+    "resetting": "Resetting...",
+    "successMessage": "Your password has been reset successfully. You can now log in with your new password.",
+    "errorMessage": "There was an error resetting your password. Please try again.",
+    "invalidLink": "The password reset link is invalid or has expired."
+  },
   "nav": {
     "home": "Home",
     "lists": "Lists",

@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { BottomNav } from '@/components/BottomNav';
 import { Header } from '@/components/Header';
@@ -30,6 +31,30 @@ export default function Auth() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const passwordsDoNotMatch = isSignUp && confirmPassword !== "" && password !== confirmPassword;
+  const isButtonDisabled = loading || (isSignUp && (!password || !confirmPassword || passwordsDoNotMatch));
+
+const handleForgotPassword = async () => {
+  if (!email) {
+    toast.error(t("auth.emailRequired"));
+    return;
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    // Эта ссылка заставит телефон открыть приложение на конкретном экране
+    redirectTo: 'http://192.168.1.14:4000/reset-password',
+  });
+
+  if (error) {
+    toast.error(`Error: ${error.message}`);
+  } else {
+    toast.success("Check your email — a reset link has been sent!");
+  }
+};
 
   // Handle OAuth redirect
   useEffect(() => {
@@ -142,7 +167,7 @@ export default function Auth() {
         if (showCheckout) {
           await handleCheckout();
         } else {
-          navigate(returnTo);
+          navigate("/account");
         }
       } else {
         const { error } = await signIn(email, password);
@@ -150,7 +175,7 @@ export default function Auth() {
         if (showCheckout) {
           await handleCheckout();
         } else {
-          navigate(returnTo);
+          navigate("/account");
         }
       }
     } catch (error: any) {
@@ -237,28 +262,67 @@ export default function Auth() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-            />
-          </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              
+              {/* Ссылка "Забыли пароль" только для режима входа */}
+              {!isSignUp && (
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-xs text-primary hover:underline transition-all"
+                >
+                 {t('auth.forgotPassword')}
+                </button>
+              )}
+            </div>
 
-          {isSignUp && (
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <div className="relative">
               <Input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your password"
+                id="password"
+                type={showPassword ? "text" : "password"} // Динамический тип
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="pr-10" // Добавляем отступ справа, чтобы текст не налезал на иконку
                 required
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+
+            {isSignUp && (
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">{t("auth.confirmPassword")}</Label>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm your password"
+                  className={passwordsDoNotMatch ? "border-destructive pr-10" : "pr-10"}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {passwordsDoNotMatch && (
+                <p className="text-sm font-medium text-destructive">
+                  {t('auth.passwordsMustMatch') || "Passwords don't match"}
+                </p>
+              )}
             </div>
           )}
 

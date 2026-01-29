@@ -2,6 +2,23 @@
   "app": {
     "title": "Locsy"
   },
+  "auth": {
+    "passwordsMustMatch": "Slaptažodžiai turi sutapti",
+    "forgotPassword": "Pamiršote slaptažodį?",
+    "confirmPassword": "Patvirtinti slaptažodį",
+    "emailRequired": "El. paštas yra privalomas"
+  },
+  "resetPassword": {
+    "title": "Atstatyti slaptažodį",
+    "instruction": "Įveskite naują slaptažodį savo paskyrai.",
+    "newPassword": "Naujas slaptažodis",
+    "confirmPassword": "Patvirtinti slaptažodį",
+    "resetPasswordButton": "Atstatyti slaptažodį",
+    "resetting": "Atstatoma...",
+    "successMessage": "Jūsų slaptažodis sėkmingai atstatytas. Dabar galite prisijungti naudodami naują slaptažodį.",
+    "errorMessage": "Nepavyko atstatyti slaptažodžio. Bandykite dar kartą.",
+    "invalidLink": "Slaptažodžio atstatymo nuoroda negalioja arba pasibaigė."
+  },
   "nav": {
     "home": "Pagrindinis",
     "lists": "Sąrašai",

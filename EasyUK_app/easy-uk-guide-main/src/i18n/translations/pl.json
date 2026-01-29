@@ -2,6 +2,23 @@
   "app": {
     "title": "Locsy"
   },
+  "auth": {
+    "passwordsMustMatch": "Hasła muszą być takie same",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "confirmPassword": "Potwierdź nowe hasło",
+    "emailRequired": "Wprowadź adres email"
+  },
+  "resetPassword": {
+    "title": "Resetuj hasło",
+    "instruction": "Wprowadź nowe hasło dla swojego konta.",
+    "newPassword": "Nowe hasło",
+    "confirmPassword": "Potwierdź nowe hasło",
+    "submit": "Zresetuj hasło",
+    "resetting": "Resetowanie...",
+    "success": "Twoje hasło zostało zresetowane pomyślnie!",
+    "error": "Nie udało się zresetować hasła. Spróbuj ponownie.",
+    "invalidLink": "Link do resetowania hasła jest nieprawidłowy lub wygasł."
+  },
   "nav": {
     "home": "Strona główna",
     "lists": "Listy kontrolne",

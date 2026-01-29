@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { FilterProvider } from "@/contexts/FilterContext";
@@ -50,14 +50,63 @@ import AddAdvertisement from "./pages/AddAdvertisement";
 import MyAds from "./pages/MyAds";
 import ModerationQueue from "./pages/ModerationQueue";
 import NotFound from "./pages/NotFound";
+import ResetPassword from "./pages/ResetPassword";
 import 'leaflet/dist/leaflet.css';
-
+import { useEffect } from "react";
+import { supabase } from '@/integrations/supabase/client';
 
 const queryClient = new QueryClient();
 
+const AuthEventsHandler = ({ children }: { children: React.ReactNode }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Supabase Auth Event:", event);
+
+      if (event === "PASSWORD_RECOVERY") {
+        // Мы используем setTimeout(0), чтобы этот переход 
+        // случился ПОСЛЕ всех стандартных редиректов системы
+        setTimeout(() => {
+          navigate("/reset-password", { replace: true });
+        }, 0);
+        return;
+      }
+
+      // Если ты хочешь, чтобы при обычном входе всегда кидало на главную, 
+      // убедись, что это НЕ срабатывает во время восстановления пароля.
+      if (event === "SIGNED_IN" && session) {
+        // Проверяем, не находимся ли мы в процессе восстановления
+        const isRecovery = window.location.hash.includes("type=recovery");
+        if (!isRecovery && window.location.pathname === "/auth") {
+          navigate("/account", { replace: true });
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
+
+  return <>{children}</>;
+};
+
 const ProtectedRoutes = () => {
   const { hasCompletedOnboarding } = useUserPreferences();
-  const { loading } = useAuth();
+  const { loading, user } = useAuth();
+  const location = useLocation();
+
+
+  const isResettingPassword = 
+    location.pathname === "/reset-password" || 
+    window.location.hash.includes("type=recovery");
+
+  console.log("--- DEBUG ProtectedRoutes ---");
+  console.log("Current Path:", location.pathname);
+  console.log("User Auth State:", user ? "Logged In" : "Not Logged In");
+  console.log("Onboarding Status:", hasCompletedOnboarding);
+  
 
   if (loading) {
     return (
@@ -67,6 +116,10 @@ const ProtectedRoutes = () => {
     );
   }
 
+  if (isResettingPassword) {
+    return <Outlet />;
+  }
+
   if (!hasCompletedOnboarding) {
     return <Navigate to="/start" replace />;
   }
@@ -74,6 +127,7 @@ const ProtectedRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Services />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/documents/:id" element={<DocumentDetails />} />
       <Route path="/nhs" element={<NHS />} />
@@ -127,8 +181,9 @@ const App = () => (
                 <BrowserRouter>
                   <Routes>
                     <Route path="/start" element={<Start />} />
-                    <Route path="/select-account-type" element={<SelectAccountType />} />
                     <Route path="/auth" element={<Auth />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
+                    <Route path="/select-account-type" element={<SelectAccountType />} />
                     <Route path="/account-type-selection" element={<AccountTypeSelection />} />
                     <Route path="*" element={<ProtectedRoutes />} />
                   </Routes>

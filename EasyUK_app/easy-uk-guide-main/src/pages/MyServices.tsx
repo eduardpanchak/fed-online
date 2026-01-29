@@ -377,17 +377,6 @@ export default function MyServices(){
                       )}
                     {isNative ? t('myServices.reactivate') : t('subscriptions.openInApp')}
                   </Button>
-                  <Button
-                    className="w-full mt-2"
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => {
-                      setServiceToDelete(service.id);
-                      setDeleteDialogOpen(true);
-                    } }
-                  >
-                    {t('common.delete')}
-                  </Button>
                 </div>
               )
             }
